@@ -55,3 +55,8 @@ exclude: ['bin', 'README.md', 'samples', 'testutil', 'third_party', 'library', '
 markdown: kramdown
 kramdown:
   input: GFM
+
+description: An image loading and caching library for Android focused on smooth scrolling
+google_analytics: 
+show_downloads: true
+theme: jekyll-theme-minimal
