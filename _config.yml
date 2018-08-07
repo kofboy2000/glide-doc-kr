@@ -1,6 +1,6 @@
 # Site title and subtitle. This is used in _includes/header.html
 title: 'Glide v4'
-subtitle: '快速高效的Android图片加载库'
+subtitle: '빠르고 효율적인 Android 이미지 로딩 라이브러리'
 
 # if you wish to integrate disqus on pages set your shortname here
 disqus_shortname: ''
@@ -18,11 +18,12 @@ navigation: 2
 codeurl: 'https://github.com/bumptech/glide'
 
 # URL to translation repo, used in _includes/header.html
-repourl: 'https://github.com/Muyangmin/glide-docs-cn'
+repourl: 'https://github.com/kofboy2000/glide-doc-kr'
 
 # Documentation for other language urls, used in _includes/header.html
 otherlang: [
   ['English', 'http://bumptech.github.io/glide/']
+  ['Chinese', 'https://muyangmin.github.io/glide-docs-cn/']
 ]
 
 # Default categories (in order) to appear in the navigation
@@ -37,7 +38,7 @@ sections: [
 
 # Keep as an empty string if served up at the root. If served up at a specific
 # path (e.g. on GitHub pages) leave off the trailing slash, e.g. /my-project
-baseurl: '/glide-docs-cn'
+baseurl: '/glide-doc-kr'
 
 # Dates are not included in permalinks
 permalink: none
@@ -57,6 +58,6 @@ kramdown:
   input: GFM
 
 description: An image loading and caching library for Android focused on smooth scrolling
-google_analytics: 
+google_analytics:
 show_downloads: true
 theme: jekyll-theme-minimal
