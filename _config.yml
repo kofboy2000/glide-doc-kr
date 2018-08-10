@@ -22,7 +22,7 @@ repourl: 'https://github.com/kofboy2000/glide-doc-kr'
 
 # Documentation for other language urls, used in _includes/header.html
 otherlang: [
-  ['English', 'http://bumptech.github.io/glide/']
+  ['English', 'http://bumptech.github.io/glide/'],
   ['Chinese', 'https://muyangmin.github.io/glide-docs-cn/']
 ]
 
