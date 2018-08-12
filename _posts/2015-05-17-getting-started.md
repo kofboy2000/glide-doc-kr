@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "开始使用"
+title: "시작하기"
 category: doc
 date: 2017-09-17 10:54:00
 order: 2
@@ -54,7 +54,7 @@ GlideApp.with(fragment)
    .into(imageView);
 ```
 
-可以访问 Glide 的 [generated API][7] 页面来获得更多信息。 
+可以访问 Glide 的 [generated API][7] 页面来获得更多信息。
 
 ### 在 ListView 和 RecyclerView 中的使用
 
@@ -145,4 +145,3 @@ Glide.with(context)
 [7]: {{ site.baseurl }}/doc/generatedapi.html
 [8]: {{ site.baseurl }}/javadocs/431/com/bumptech/glide/RequestBuilder.html#submit-int-int-
 [9]: {{ site.baseurl }}/doc/targets.html
-
