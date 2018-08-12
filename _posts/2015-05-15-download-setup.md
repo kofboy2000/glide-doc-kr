@@ -1,26 +1,26 @@
 ---
 layout: page
-title: "下载和设置"
+title: "다운로드 및 설치"
 category: doc
 date: 2018/7/9 16:37
 order: 1
 disqus: 1
-translators: [Muyangmin, vincgao]
+translators: [kofboy2000]
 ---
 
-原文链接：[点击查看](http://bumptech.github.io/glide/doc/download-setup.html){:target="_blank"}
+원문보기：[링크](http://bumptech.github.io/glide/doc/download-setup.html)
 
 * TOC
 {:toc}
-### Android SDK 要求
+### Android SDK 요구사항
 
-**Min Sdk Version** - 使用 Glide 需要 min SDK 版本 API **14** (Ice Cream Sandwich) 或更高。
+**Min Sdk Version** - Glide v4 는 [Ice Cream Sandwich][10] (API level 14) 이상에서 동작 합니다.
 
-**Compile Sdk Version** - Glide 必须使用 API **27** (Oreo MR1) 或更高版本的 SDK 来编译。
+**Compile Sdk Version** - Glide는 SDK 버전 **27(Oreo MR1)** 이상에서 컴파일해야 합니다.
 
-**Support Library Version** - Glide 使用的支持库版本为 **27**。
+**Support Library Version** - Glide 는 Support library 버전 **27** 을 사용 합니다.
 
-如果你需要使用不同的支持库版本，你需要在你的 `build.gradle` 文件里去从 Glide 的依赖中去除 `"com.android.support"`。例如，假如你想使用 v26 的支持库： 
+다른 버전의 Support library 를 사용하려면 build.gradle 파일에서 `"com.android.support"`을 제외해야 합니다. v26을 사용하시려면 아래를 참고하시기 바랍니다.
 
 ```groovy
 dependencies {
@@ -30,28 +30,28 @@ dependencies {
   implementation "com.android.support:support-fragment:26.1.0"
 }
 ```
-使用与 Glide 依赖的支持库不同的版本可能会导致一些运行时异常 ，例如：
+
+Glide 가 다른 버전의 Support library 를 사용하면 다음과 같은 Runtime Exception 이 발생할 수 있습니다.:
 
 ```
-java.lang.NoSuchMethodError: No static method getFont(Landroid/content/Context;ILandroid/util/TypedValue;ILandroid/widget/TextView;)Landroid/graphics/Typeface; in class Landroid/support/v4/content/res/ResourcesCompat; or its super classes (declaration of 'android.support.v4.content.res.ResourcesCompat' 
+java.lang.NoSuchMethodError: No static method getFont(Landroid/content/Context;ILandroid/util/TypedValue;ILandroid/widget/TextView;)Landroid/graphics/Typeface; in class Landroid/support/v4/content/res/ResourcesCompat; or its super classes (declaration of 'android.support.v4.content.res.ResourcesCompat'
 at android.support.v7.widget.TintTypedArray.getFont(TintTypedArray.java:119)
 ```
 
-也可能造成 Glide 的 API 生成器失败，从而不能正确地生成 `GlideApp` 类.
+또한 Glide 의 API에 문제가 발생하여 `GlideApp` 클래스가 생성되지 않을 수도 있습니다.
+자세한 내용은 이슈 [#2730][8] 를 참조하시기 바랍니다.
 
-请参阅 [#2730][8] 获取这方面的更多信息。
+### 다운로드
 
-### 下载
-
-可以使用多种方法获取 Glide 的公开发行版。
+Glide 의 공개 버전은 여러 가지 방법으로 다운로드 받으실 수 있습니다.
 
 #### Jar
 
-你可以直接在 GitHub 下载[最新的 jar 包][1]。并且还需要包含 Android [v4支持库][2] 的 jar 包。
+GitHub 에서 [최신 jar 파일][1]을 다운로드 받으실 수 있습니다. Android [v4 Support library][2] 도 포함해야 되는 것을 잊지 마시기 바랍니다.
 
 #### Gradle
 
-如果使用 Gradle，可从 Maven Central 或 JCenter 中添加对 Glide 的依赖。同样，你还需要添加 Android 支持库的依赖。
+Gradle 을 사용하는 경우 Maven Central 또는 JCenter 를 사용하여 Gradle 의 dependency 에 추가할 수 있습니다. 이 경우에도 Support libarary 를 추가하셔야 합니다.
 
 ```groovy
 repositories {
@@ -65,7 +65,7 @@ dependencies {
 }
 ```
 
-注意：如果可能，请尽量在你的依赖中避免使用 `@aar` 。如果你必须这么做，请添加 `transitive=true` 以确保所有必要的类都被包含到你的 API 中：
+주의：되도록이면 `@aar` 자체를 Gradle 에 추가하는 것은 피하사기 바랍니다. 만약 꼭 필요하다면 `transitive=true` 를 추가하시고 APK 필요한 모든 클래스들을 추가하시기 바랍니다.
 
 ```groovy
 dependencies {
@@ -74,9 +74,9 @@ dependencies {
     }
 }
 ```
-在 Gradle 中，`@aar` 意味着 ["Artifact Only"][9]，默认情况下将排除所有依赖。
+`@aar` 은 기본적으로 Gradle 의 dependency 를 제거하는 ["Artifact Only"][9] 표기법 입니다.
 
-使用 `@aar` 而不使用 `transitive=true` ,将会排除 Glide 的依赖，并导致运行时异常，例如：
+dependency 에 추가하지 않고 `@aar` 자체를 추가한 후 `transitive=true` 를 선언하지 않는다면 다음과 같은 Runtime exception 이 발생 할 수 있습니다. ：
 
 ```
 java.lang.NoClassDefFoundError: com.bumptech.glide.load.resource.gif.GifBitmapProvider
@@ -92,10 +92,9 @@ java.lang.NoClassDefFoundError: com.bumptech.glide.load.resource.gif.GifBitmapPr
     at com.bumptech.glide.Glide.with(Glide.java:684)
 ```
 
-
 #### Maven
 
-如果使用 Maven，同样可以添加对 Glide 的依赖。再次强调，你依旧需要添加 Android 支持库的依赖。
+Maven 을 사용하신다면 Glide 를 dependency 에 추가하여 사용 하실 수 있습니다. 거듭 강조하지만, support libarary 추가를 잊지 마시기 바랍니다.
 
 ```xml
 <dependency>
@@ -117,15 +116,15 @@ java.lang.NoClassDefFoundError: com.bumptech.glide.load.resource.gif.GifBitmapPr
 </dependency>
 ```
 
-### 设置
+### 설치
 
-针对相应的构建配置，你可能还需要做一些额外的设置。
+빌드 환경에 따라서 몇가지 추가 설정이 필요할 수도 있습니다.
 
-#### 权限
-Glide 假定你要访问的数据都存储在你的应用中，不要求任何权限。也就是说，大部分应用从设备上（DCIM，图库，或SD卡的其他地方）或 Internet 上加载图片。因此，你可能需要包含一条或多条以下列出的权限，这取决于你的应用场景。
+#### 권한
+사용하는 모든 데이터가 어플리케이션 내에 저장 되어 있을 경우 별도 권한은 필요 하지 않습니다. 즉, 대부분의 어플리케이션은 장치에서 이미지를 로드하거나((DCIM, Pictures 또는 SD 카드의 다른 곳) 인터넷에서 이미지를 로드 합니다. 따라서, 경우에 따라 아래에 나열된 권한 중 하나 이상을 포함하여야 합니다.
 
 ##### Internet
-如果你计划从 URL 或一个网络连接中加载数据，你需要添加 ``INTERNET`` 和 ``ACCESS_NETWORK_STATE`` 权限到你的 ``AndroidManifest.xml`` 中：
+URL 또는 네트워크 연결을 통해 이미지를 로드하려는 경우 ``AndroidManifest.xml`` 에  ``INTERNET`` 및 ``ACCESS_NETWORK_STATE`` 권한을 추가해야 합니다.
 
 ```xml
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
@@ -144,17 +143,18 @@ Glide 假定你要访问的数据都存储在你的应用中，不要求任何�
 </manifest>
 ```
 
-从技术上讲，``ACCESS_NETWORK_STATE`` 对于 Glide 加载 URL 并不是必需的，但是它将帮助 Glide 处理 *片状网络(flaky network)* 和飞行模式。请继续阅读下面的连接监视章节以了解详情。
+``ACCESS_NETWORK_STATE`` 는 Glide 가 URL 을 불러오는데 필요한 것은 아니지만 Glide 가 불안정한 네트워크 상태나 비행기 모드를 처리하는데 필요합니다. 자세한 내용은 아래의 연결 상태 확인 및 모니터링을 확인해 보시기 바랍니다.
 
-##### 连接监听 (Connectivity Monitoring)
-如果你正在从 URL 加载图片，Glide 可以自动帮助你处理片状网络连接：它可以监听用户的连接状态并在用户重新连接到网络时重启之前失败的请求。如果 Glide 检测到你的应用拥有 ``ACCESS_NETWORK_STATE`` 权限，Glide 将自动监听连接状态而不需要额外的改动。
+##### 연결 상태 확인 및 모니터링
+URL에서 이미지를 로드하는 경우, Glide 는 사용자의 연결 상태를 모니터링하고 사용자가 다시 연결할 때 실패한 요청을 재시작하여 네트워크 연결이 끊어지는 문제를 자동으로 해결하도록 도와줍니다. 어플리케이션에 ACCESS_NETWORK_STATE 가 선언 되어 있으면, Glide 는 연결 상태를 자동으로 모니터링하고 추가 작업은 필요하지 않습니다.
 
-你可以通过检查 ``ConnectivityMonitor`` 日志标签来验证 Glide 是否正在监听网络状态: 
+ConnectivityMonitor 로그 태그를 보시면 Glide가 네트워크 상태를 모니터링하는지 확인할 수 있습니다.
 
 ```
 adb shell setprop log.tag.ConnectivityMonitor DEBUG
 ```
-如果你成功添加了 ``ACCESS_NETWORK_STATE`` 权限，你将在 logcat 中看到类似这样的日志：
+
+``ACCESS_NETWORK_STATE`` 권한을 추가한 경우 다음과 같이 logcat에 로그가 표시됩니다.
 
 ```
 11-18 18:51:23.673 D/ConnectivityMonitor(16236): ACCESS_NETWORK_STATE permission granted, registering connectivity monitor
@@ -162,14 +162,14 @@ adb shell setprop log.tag.ConnectivityMonitor DEBUG
 11-18 18:49:00.701 V/ConnectivityMonitor(15773): connectivity changed: true
 ```
 
-而如果权限缺失，你将看到一条错误：
+권한이 설정되지 않았다면, 아래와 같은 에러가 발생 하게 됩니다. ：
 
 ```
 11-18 18:51:23.673 D/ConnectivityMonitor(16236): ACCESS_NETWORK_STATE permission missing, cannot register connectivity monitor
 ```
 
-##### 本地存储 (Local Storage)
-要从本地文件夹或 DCIM 或图库中加载图片，你将需要添加 ``READ_EXTERNAL_STORAGE`` 权限：
+##### 저장 공간
+DCIM 또는 Pictures 와 같은 로컬 폴더에서 이미지를 로드하려면 ``READ_EXTERNAL_STORAGE`` 권한을 추가해야 합니다.
 
 ```xml
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
@@ -183,7 +183,7 @@ adb shell setprop log.tag.ConnectivityMonitor DEBUG
 </manifest>
 ```
 
-而如果要使用 [``ExternalPreferredCacheDiskCacheFactory``][7] 来将 Glide 的缓存存储到公有 SD 卡上，你还需要添加 ``WRITE_EXTERNAL_STORAGE`` 权限：
+[``ExternalPreferredCacheDiskCacheFactory``][7] 를 사용하여 Glide 의 캐시를 저장 공간에 저장하려면, WRITE_EXTERNAL_STORAGE 이 필요합니다.
 
 ```xml
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
@@ -199,7 +199,7 @@ adb shell setprop log.tag.ConnectivityMonitor DEBUG
 
 #### Proguard
 
-如果你有使用到 proguard，那么请把以下代码添加到你的 ``proguard.cfg`` 文件中：
+proguard 를 사용한다면 ``proguard.cfg`` 에 아래와 같이 추가해 줍니다.
 ```
 -keep public class * implements com.bumptech.glide.module.GlideModule
 -keep public class * extends com.bumptech.glide.module.AppGlideModule
@@ -207,16 +207,17 @@ adb shell setprop log.tag.ConnectivityMonitor DEBUG
   **[] $VALUES;
   public *;
 }
+```
 
-如果你的 target API 低于 Android API 27，请添加：
+target API 레벨이 Android API 27 이하 버전일 경우 아래 라인도 추가해 줍니다.
 ```pro
 -dontwarn com.bumptech.glide.load.resource.bitmap.VideoDecoder
 ```
 
-VideoDecoder 使用 API 27 的一些接口，这可能导致 proguard 发出警告，尽管这些 API 在旧版 Android 设备上根本不会被调用。
+VideoDecoder는 API 27 API를 사용하므로, 이전 버전의 Android 단말에서는 새로운 API를 호출하지 않더라도 proguard 경고를 발생시킬 수 있습니다.
 
-如果你使用 DexGuard 你可能还需要添加：
-```pro
+DexGuard 를 사용할 경우 아래 라인도 추가해 줍니다.
+```
 # for DexGuard only
 -keepresourcexmlelements manifest/application/meta-data@value=GlideModule
 ```
@@ -232,7 +233,7 @@ Glide 本身没有使用，也不要求你使用 Java 8 来编译或在你项目
 
 #### Kotlin
 
-如果你在 Kotlin 编写的类里使用 Glide 注解，你需要引入一个 ``kapt`` 依赖，以代替常规的 ``annotationProcessor`` 依赖：
+Kotlin 으로 구현된 클래스에서 Glide의 annotation 을 사용하는 경우 annotationProcessor 대신 Glide 의 annotation 프로세서(anntation processor) 에 kapt dependency 를 포함해야 합니다.
 
 ```groovy
 dependencies {
@@ -240,13 +241,13 @@ dependencies {
 }
 ```
 
-请注意，你还需要在你的 `build.gradle` 文件中包含 `kotlin-kapt`插件：
+`build.gradle` 에 `kotlin-kapt` 도 포함해야 합니다.
 
 ```groovy
 apply plugin: 'kotlin-kapt'
 ```
 
-关于 Kotlin 的更多 api，可以查看 [Generated API][6]。
+자세한 내용은 [Generated API][6] 를 참조하시기 바랍니다.
 
 [1]: https://github.com/bumptech/glide/releases/download/v3.6.0/glide-3.6.0.jar
 [2]: http://developer.android.com/tools/support-library/features.html#v4
@@ -257,5 +258,4 @@ apply plugin: 'kotlin-kapt'
 [7]: {{ site.baseurl }}/javadocs/431/com/bumptech/glide/load/engine/cache/ExternalPreferredCacheDiskCacheFactory.html
 [8]: https://github.com/bumptech/glide/issues/2730
 [9]: https://docs.gradle.org/current/userguide/dependency_management.html#ssub:artifact_dependencies
-
-
+[10]: https://developer.android.com/about/versions/android-4.0-highlights.html
