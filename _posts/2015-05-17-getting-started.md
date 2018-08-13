@@ -2,19 +2,20 @@
 layout: page
 title: "시작하기"
 category: doc
-date: 2017-09-17 10:54:00
+date: 2018-08-14 00:50:00
 order: 2
 disqus: 1
-translators: [Muyangmin, vincgao]
+translators: [kofboy2000]
 ---
 
-原文链接：[点击查看](http://bumptech.github.io/glide/doc/getting-started.html){:target="_blank"}
+원문보기：[링크](http://bumptech.github.io/glide/doc/getting-started.html)bx
 
 * TOC
 {:toc}
-### 基本用法
 
-多数情况下，使用Glide加载图片非常简单，一行代码足矣：
+### 기본 사용법
+
+Glide 이미지 로딩은 쉽고, 대개 한줄로 가능 합니다.
 
 ```java
 Glide.with(fragment)
@@ -22,17 +23,17 @@ Glide.with(fragment)
     .into(imageView);
 ```
 
-取消加载同样很简单：
+더이상 사용하지 않는 이미지 로딩의 취소도 매우 간단합니다.
 
 ```java
 Glide.with(fragment).clear(imageView);
 ```
 
-尽管及时取消不必要的加载是很好的实践，但这并不是必须的操作。实际上，当 [``Glide.with()``][1] 中传入的 Activity 或 Fragment 实例销毁时，Glide 会自动取消加载并回收资源。
+더 이상 필요하지 않은 로딩를 제거하는 것도 좋지만, 꼭 그렇게 할 필요는 없습니다. [``Glide.with()``][1] 로 전달 된 Activity 나 Fragment 가 종료 될 때 Glide 는 자동으로 사용한 자원을 재활용하거나 클리어시키고 있습니다.
 
-### 在 Application 模块中的使用
+### Applications
 
-在 Application 模块中，可创建一个添加有 `@GlideModule` 注解，继承自 `AppGlideModule` 的类。此类可生成出一个流式 API，内联了多种选项，和集成库中自定义的选项：
+Application 에는 `@GlideModule` 어노테이션(annotation) 을 추가한 `AppGlideModule` 를 구현함으로써 라이브러리에 정의된 옵션을 포함하여 대부분의 옵션을 사용할 수 있는 API를 생성합니다.
 
 ```java
 package com.example.myapp;
@@ -44,7 +45,7 @@ import com.bumptech.glide.module.AppGlideModule;
 public final class MyAppGlideModule extends AppGlideModule {}
 ```
 
-生成的 API 默认名为 `GlideApp` ，与 [``AppGlideModule``][6] 的子类包名相同。在 Application 模块中将 ``Glide.with()`` 替换为 ``GlideApp.with()``，即可使用该 API 去完成加载工作。
+API 는 [``AppGlideModule``][6] 과 동일한 패키지 내에 생성되며 기본적으로 `GlideApp` 이라는 이름으로 지정 됩니다. Application 은 ``Glide.with()`` 대신 ``GlideApp.with()`` 으로 API 를 사용할 수 있습니다.
 
 ```java
 GlideApp.with(fragment)
@@ -54,11 +55,11 @@ GlideApp.with(fragment)
    .into(imageView);
 ```
 
-可以访问 Glide 的 [generated API][7] 页面来获得更多信息。
+자세한 내용은 Glide 의 [generated API][7] 를 참조하시기 바랍니다.
 
-### 在 ListView 和 RecyclerView 中的使用
+### ListView 와 RecyclerView
 
-在 ListView 或 RecyclerView 中加载图片的代码和在单独的 View 中加载完全一样。Glide 已经自动处理了 View 的复用和请求的取消：
+ListView 와 RecyclerView 에서의 이미지 로딩도 일반적인 View 에서의 로딩과 동일한 코드를 사용 합니다. Glide 가 자동적으로 View 의 재사용및 취소 요청을 처리 합니다.
 
 ```java
 @Override
@@ -70,9 +71,9 @@ public void onBindViewHolder(ViewHolder holder, int position) {
 }
 ```
 
-对 url 进行 null 检验并不是必须的，如果 url 为 null，Glide 会清空 View 的内容，或者显示 [placeholder Drawable][2] 或 [fallback Drawable][3] 的内容。
+url 에 대한 null 체크도 필요하지 않습니다. url 이 null 일 경우, Glide 가 View 를 클리어 시키거나, 사용자가 정의한 [placeholder Drawable][2] 나 [fallback Drawable][3] 을 설정해 주게 됩니다.
 
-Glide 唯一的要求是，对于任何可复用的 ``View`` 或 [``Target``][5] ，如果它们在之前的位置上，用 Glide 进行过加载操作，那么在新的位置上要去执行一个新的加载操作，或调用 [``clear()``][4] API 停止 Glide 的工作。
+Glide 의 유일한 요구사항은 어떠한 재사용 가능한 ``View`` 나 [``Target``][5] 의 기존에 있던 내용들을 다시 한번 새로 로드 하거나 [``clear()``][4] API 로 명시적으로 클리어 해주어야 한 다는 것 입니다.
 
 ```java
 @Override
@@ -89,12 +90,13 @@ public void onBindViewHolder(ViewHolder holder, int position) {
 }
 ```
 
-对 ``View`` 调用 [``clear()``][4] 或 ``into(View)``，表明在此之前的加载操作会被取消，并且在方法调用完成后，Glide 不会改变 view 的内容。如果你忘记调用 [``clear()``][4]，而又没有开启新的加载操作，那么就会出现这种情况，你已经为一个 view 设置好了一个 ``Drawable``，但该 view 在之前的位置上使用 Glide 进行过加载图片的操作，Glide 加载完毕后可能会将这个 view 改回成原来的内容。
+``View`` 에 [``clear()``][4] 나 ``into(View)`` 를 호출함으로써 이전 로드를 취소하고 Glide 호출이 완료된 후 View 의 내용이 변경되지 않도록 보장할 수 있습니다. If you forget to call [``clear()``][4] and don’t start a new load, the load you started into the same View for a previous position may complete after you set your special Drawable and change the contents of the View to an old image.
 
-这里的代码以 RecyclerView 的使用为例，但规则同样适用于 ListView。
+여기서 보신 예제는 RecycleClerView에 대한 것이지만 ListView에도 동일하게 적용 됩니다.
 
-### 非 View 目标
-除了将 ``Bitmap`` 和 ``Drawable`` 加载到 ``View`` 之外，你也可以开始异步加载到你的自定义 ``Target`` 中：
+### View 가 아닌 타겟 (Non-View Targets)
+
+``Bitmap`` 이나 ``Drawable`` 를 ``View`` 에 불러오는 것 외에도 사용자 지정 ``Target`` 에 의 비동기 로드를 시작 할 수 있습니다.
 
 ```java
 Glide.with(context
@@ -106,11 +108,10 @@ Glide.with(context
     }
   });
 ```
-使用自定义 ``Target`` 有一些陷阱，所以请务必阅读 [目标文档页][9] 的详细内容。
 
-### 后台线程
+### 백그라운드 쓰레드
 
-在后台线程加载图片也是直接使用 [``submit(int, int)``][8]：
+백그라운드 쓰레드에서의 이미지 로딩도 [``submit(int, int)``][8] 를 사용하면 아주 간단 합니다.
 
 ```java
 FutureTarget<Bitmap> futureTarget =
@@ -125,7 +126,7 @@ Bitmap bitmap = futureTarget.get();
 Glide.with(context).clear(futureTarget);
 ```
 
-如果你不想让 ``Bitmap`` 和 ``Drawable`` 自身在后台线程中，你也可以使用和前台线程一样的方式来开始异步加载：
+``Bitmap`` 이나``Drawable`` 이 백그라운드 쓰레드 자체에 필요하지 않다면 백그라운드 쓰레드에서도 포어그라운드(foreground) 쓰레드에서 하던 것과 마찮가지로 비동기 로드를 할 수 있습니다.
 
 ```java
 Glide.with(context)
