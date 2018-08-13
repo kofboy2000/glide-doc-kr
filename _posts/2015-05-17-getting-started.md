@@ -8,7 +8,7 @@ disqus: 1
 translators: [kofboy2000]
 ---
 
-원문보기：[링크](http://bumptech.github.io/glide/doc/getting-started.html)bx
+원문보기：[링크](http://bumptech.github.io/glide/doc/getting-started.html)
 
 * TOC
 {:toc}
@@ -90,7 +90,7 @@ public void onBindViewHolder(ViewHolder holder, int position) {
 }
 ```
 
-``View`` 에 [``clear()``][4] 나 ``into(View)`` 를 호출함으로써 이전 로드를 취소하고 Glide 호출이 완료된 후 View 의 내용이 변경되지 않도록 보장할 수 있습니다. If you forget to call [``clear()``][4] and don’t start a new load, the load you started into the same View for a previous position may complete after you set your special Drawable and change the contents of the View to an old image.
+``View`` 에 [``clear()``][4] 나 ``into(View)`` 를 호출함으로써 이전 로드를 취소하고 Glide 호출이 완료된 후 View 의 내용이 변경되지 않도록 보장할 수 있습니다. 
 
 여기서 보신 예제는 RecycleClerView에 대한 것이지만 ListView에도 동일하게 적용 됩니다.
 
