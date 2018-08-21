@@ -2,38 +2,38 @@
 layout: page
 title: "Generated API"
 category: doc
-date: 2017-09-17 16:19:51
+date: 2018-08-15 16:19:51
 order: 3
 disqus: 1
-translators: [Muyangmin, vincgao]
+translators: [kofboy2000]
 ---
 
-原文链接：[点击查看](http://bumptech.github.io/glide/doc/generatedapi.html){:target="_blank"}
+원문보기：[링크](http://bumptech.github.io/glide/doc/generatedapi.html)
 
 * TOC
 {:toc}
 
-### 简介
+### 소개
 
-Glide v4 使用 [注解处理器 (Annotation Processor)][1] 来生成出一个 API，在 Application 模块中可使用该流式 API 一次性调用到 [``RequestBuilder``][2]， [``RequestOptions``][3] 和集成库中所有的选项。
+Glide v4 는 [어노테이션 프로세서 (Annotation Processor)][1] 를 사용하여 Application 이 [``RequestBuilder``][2], [``RequestOptions``][3], 그리고 통합 라이브러리의 모든 옵션에 접근할 수 있는 API 를 만들수 있습니다.
 
-Generated API 模式的设计出于以下两个目的：
-1. 集成库可以为 Generated API 扩展自定义选项。
-2. 在 Application 模块中可将常用的选项组打包成一个选项在 Generated API 中使用
+Generated API 는 두 가지 용도로 사용 됩니다.
+1. Integration libraries can extend Glide’s API with custom options.
+2. Applications can extend Glide’s API by adding methods that bundle commonly used options.
 
-虽然以上所说的工作均可以通过手动创建 [``RequestOptions``][3] 子类的方式来完成，但想将它用好更具有挑战，并且降低了 API 使用的流畅性。
+상기 두 가지 경우 모두 [``RequestOptions``][3] 상속 받는 클래스를 직접 만들어 할 수도 있으나, 그럴 경우 상대적으로 더 많은 수고를 들이게 되고 덜 유려한 API 를 생성하게 됩니다.
 
-### 开始使用
+### 시작하기
 
-#### 有效使用范围
+#### 유용성
 
-Generated API 目前仅可以在 Application 模块内使用。这一限制可以让我们仅持有一份 Generated API，而不是各个 Library 和 Application 中均有自己定义出来的 Generated API。这一做法会让 Generated API 的调用更简单，并确保 Application 模块中 Generated API 调用的选项在各处行为一致。这一限制在接下来的版本中也许会被取消（以实验性或其他的方式给出）。
+Generated API 는 현재 Application 에서만 가능 합니다. Generated API 를 Application 에 제한 함으로써 N 개의 구현이 아닌, 하나의 구현만 가질수 있도록 하였고, 이로 인해 하나의 Application 에 하나의 라이브러리만 존재할 수 있도록 하였습니다. 결과적으로, import 를 관리하기 간단하고 모든 콜 패쓰(call paths) 에서 정확한 옵션을 적용 받을 수 있게 하였습니다. 이러한 제약은 (실험적으로든 다른 방법으로든) 향후 버전에서 해제될 수도 있습니다.
 
 #### Java
 
-要在 Application 模块中使用 Generated API，你需要执行以下两步：
+Application 에서 Generated API 를 사용하려면 두 단계를 수행하셔야 합니다.
 
-1. 添加 Glide 注解处理器的依赖：
+1. Glide 의 어노테이션 프로세서(annotation processor)를 추가하여야 합니다.：
 
    ```groovy
    repositories {
@@ -45,9 +45,9 @@ Generated API 目前仅可以在 Application 模块内使用。这一限制可�
    }
    ```
 
-   参阅 [下载和设置][12] 页面了解更多。
+   자세한 내용은 [다운로드 및 설치][12] 를 참조하시기 바랍니다.
 
-2. 在 Application 模块中包含一个 [``AppGlideModule``][4] 的实现：
+2. [``AppGlideModule``][4] 를 구현하여 application 에 포함시켜 줍니다.
 
    ```java
    package com.example.myapp;
@@ -58,18 +58,18 @@ Generated API 目前仅可以在 Application 模块内使用。这一限制可�
    @GlideModule
    public final class MyAppGlideModule extends AppGlideModule {}
    ```
-   
-你不必去重写 `AppGlideModule` 中的任何一个方法。子类中完全可以不用写任何东西，它只需要继承 `AppGlideModule` 并且添加 `@GlideModule` 注解。
 
-[``AppGlideModule``][4] 的实现必须使用 [``@GlideModule``][5] 注解标记。如果注解不存在，该 module 将不会被 Glide 发现，并且在日志中收到一条带有 ``Glide`` tag 的警告，表示 module 未找到。
+geneated API 를 사용하기 위해 꼭 특정 함수를 구현해야 하지 않으며,  `AppGlideModule` 를 상속 받고, `@GlideModule` 어노테이션이 있다면 `AppGlideModule` 를 빈 클래스로 두셔도 괜찮습니다.
 
-**注意：** 程序库 (Library) **不** 应该包含 [`AppGlideModule`][4] 实现，详见 [配置][15]。
+[``AppGlideModule``][4] 은 반드시 [``@GlideModule``][5] 어노테이션이 있어야 합니다. 그렇지 않을 경우, `Glide` 가 module 을 찾을 수 없으며 로그에서 ``Glide`` 로 tag 된, module 을 찾을 수 없다는 경고를 보게 될 것 입니다.
+
+**주의：** 라이브러리는 [`AppGlideModule`][4] 를 가져서는 **안됩니다.** 자세한 내용은 [환경 설정][15] 페이지를 확인하시기 바랍니다.
 
 #### Kotlin
 
-如果你正在使用Kotlin，你可以选择：
+만약 Kotlin 을 사용하신다면 아래를 참조해주시기 바랍니다.
 
-1. 使用 Java 按前面所述实现所有的 Glide 注解类([``AppGlideModule``][4]， [``LibraryGlideModule``][13]，以及 [``GlideExtension``][6] )。
+1. 위 Java 섹션에서 언급한 Glide 모듈을 모두 포함하여 주시기 바랍니다. ([``AppGlideModule``][4], [``LibraryGlideModule``][13], [``GlideExtension``][6] ).
 
 2. 使用 Kotlin 实现注解类，但需要添加一个 ``kapt`` 依赖以替换 Glide 的``annotationProcessor`` 依赖：
 
@@ -79,11 +79,11 @@ Generated API 目前仅可以在 Application 模块内使用。这一限制可�
    }
    ```
    注意，你还需要在你的 ``build.gradle`` 文件中包含 ``kotlin-kapt`` 插件：
-   
+
    ```groovy
    apply plugin: 'kotlin-kapt'
    ```
-    
+
     此外，如果你有其他的注解处理器，它们都必须全部被从 ``annotationProcessor`` 转换为 ``kapt``：
 
    ```groovy
@@ -160,7 +160,7 @@ public class MyAppExtension {
 
 ```java
 public class GlideOptions extends RequestOptions {
-  
+
   public GlideOptions miniThumb() {
     MyAppExtension.miniThumb(this);
   }
@@ -229,7 +229,7 @@ public class GlideRequests extends RequesetManager {
     MyAppExtension.asGif(builder);
     return builder;
   }
-  
+
   ...
 }
 ```
@@ -261,5 +261,3 @@ GlideApp.with(fragment)
 [13]: {{ site.baseurl }}/javadocs/400/com/bumptech/glide/module/LibraryGlideModule.html
 [14]: https://kotlinlang.org/docs/reference/kapt.html
 [15]: {{ site.baseurl }}/doc/configuration.html#avoid-appglidemodule-in-libraries
-
-
