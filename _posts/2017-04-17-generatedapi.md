@@ -33,7 +33,7 @@ Generated API 는 현재 Application 에서만 가능 합니다. Generated API �
 
 Application 에서 Generated API 를 사용하려면 두 단계를 수행하셔야 합니다.
 
-1. Glide 의 어노테이션 프로세서(annotation processor)를 추가하여야 합니다.：
+1. Glide 의 어노테이션 프로세서(annotation processor)를 추가하여야 합니다.
 
    ```groovy
    repositories {
@@ -67,24 +67,24 @@ geneated API 를 사용하기 위해 꼭 특정 함수를 구현해야 하지 �
 
 #### Kotlin
 
-만약 Kotlin 을 사용하신다면 아래를 참조해주시기 바랍니다.
+만약 Kotlin 을 사용하신다면,
 
-1. 위 Java 섹션에서 언급한 Glide 모듈을 모두 포함하여 주시기 바랍니다. ([``AppGlideModule``][4], [``LibraryGlideModule``][13], [``GlideExtension``][6] ).
+1. 위 Java 섹션에서 언급한 Glide 모듈을 모두 포함하여 줍니다. ([``AppGlideModule``][4], [``LibraryGlideModule``][13], [``GlideExtension``][6] ).
 
-2. 使用 Kotlin 实现注解类，但需要添加一个 ``kapt`` 依赖以替换 Glide 的``annotationProcessor`` 依赖：
+2. Glide 의 annotation processor 는 ``annotationProcessor`` 대신 ``kapt`` 를 사용 합니다.
 
    ```groovy
    dependencies {
      kapt 'com.github.bumptech.glide:compiler:4.7.1'
    }
    ```
-   注意，你还需要在你的 ``build.gradle`` 文件中包含 ``kotlin-kapt`` 插件：
+  ``build.gradle`` 파일에 ``kotlin-kapt`` 추가 하는 것을 잊지 마시기 바랍니다.
 
    ```groovy
    apply plugin: 'kotlin-kapt'
    ```
 
-    此外，如果你有其他的注解处理器，它们都必须全部被从 ``annotationProcessor`` 转换为 ``kapt``：
+    추가로, 다른 annotation processor가 있다면 이들을 모두 ``annotationProcessor`` 에서 ``kapt``로 변경 합니다.
 
    ```groovy
    dependencies {
@@ -93,15 +93,15 @@ geneated API 를 사용하기 위해 꼭 특정 함수를 구현해야 하지 �
    }
    ```
 
-   关于``kapt``的使用，请查看[官方文档][14]。
+   ``kapt`` 에 더 알고 싶으신 분은 [공식 문서][14] 를 확인하시기 바랍니다.
 
 #### Android Studio
 
-Android Studio 在大多数时候都可以正确地处理注解处理器 (annotation processor) 和 generated API。然而，当你第一次添加你的 ``AppGlideModule`` 或做了某些类型的修改后，你可能需要重新构建 (rebuild) 你的项目。 无论何时，如果你发现 API 没有被 import ，或看起来已经过期，你可以通过以下方法重新构建：
-1. 打开 Build 菜单；
-2. 点击 Rebuild Project。
+Android Studio 에서는 어노테이션 프로세스 (annotation processor) 와 generated API 를 사용하시는데 별 무리 없이 동작할 것 입니다. 다만, ``AppGlideModule`` 를 처음 추가하거나 Glide 에 관련된 수정이 있다면 프로젝트를 한번은 재빌드(rebuild) 하셔야 할 수도 있습니다. 만약 API 가 import 되지 않거나 동작이 잘 안될 경우 다음과 같이 rebuild 를 수행 합니다.
+1. Build 메뉴를 열고.
+2. Rebuild Project 를 클릭 합니다.
 
-### 使用 Generated API
+### Generated API 사용
 
 Generated API 默认名为 `GlideApp` ，与 Application 模块中 [`AppGlideModule`][4]的子类包名相同。在 Application 模块中将 `Glide.with()` 替换为 `GlideApp.with()`，即可使用该 API 去完成加载工作：
 
