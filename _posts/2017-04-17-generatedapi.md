@@ -103,7 +103,7 @@ Android Studio 에서는 어노테이션 프로세스 (annotation processor) 와
 
 ### Generated API 사용
 
-Generated API 默认名为 `GlideApp` ，与 Application 模块中 [`AppGlideModule`][4]的子类包名相同。在 Application 模块中将 `Glide.with()` 替换为 `GlideApp.with()`，即可使用该 API 去完成加载工作：
+Generated API 는 `GlideApp` 이라는 이름을 기본으로 가지고, Application 에서 제공하는 [`AppGlideModule`][4] 구현과 동일한 패키지에서 제공 됩니다. 해당 API 는 `Glide.with()` 대신에 `GlideApp.with()` 로 호출하여 사용 할 수 있습니다.
 
 ```java
 GlideApp.with(fragment)
@@ -113,22 +113,22 @@ GlideApp.with(fragment)
    .into(imageView);
 ```
 
-与 ``Glide.with()`` 不同，诸如  ``fitCenter()`` 和 ``placeholder()`` 等选项在 Builder 中直接可用，并不需要再传入单独的 [``RequestOptions``][3] 对象。
+``Glide.with()`` 와는 다르게 ``fitCenter()`` 나 ``placeholder()`` 과 같은 옵션들을 Builder 를 통해 바로 호출할 수 있고, [``RequestOptions``][3] 객체를 별도로 사용할 필요도 없습니다.
 ​    
 ### GlideExtension
 
-Glide Generated API 可在 Application 和 Library 中被扩展。扩展使用被注解的静态方法来添加新的选项、修改现有选项、甚至添加额外的类型支持。
+Glide Generated API 는 Application 과 Library 에서 상속 받을 수 있습니다. annotation 을 이용하여 새로운 옵션을 만들거나, 기존의 옵션을 수정하거나 혹은 새로운 타입을 만들 수 있습니다.
 
-[``@GlideExtension``][6] 注解用于标识一个扩展 Glide API 的类。任何扩展 Glide API 的类都必须使用这个注解来标记，否则其中被注解的方法就会被忽略。
+[``@GlideExtension``][6] 로 Glide API 를 확장하는 클래스 임을 명시 하며, Glide API 를 상속 받는 모든 클래스에는 해당 어노테이션을 사용하여야 합니다.
 
-被 [``@GlideExtension``][6] 注解的类应以工具类的思维编写。这种类应该有一个私有的、空的构造方法，应为 final 类型，并且仅包含静态方法。被注解的类可以含有静态变量，可以引用其他的类或对象。
+[``@GlideExtension``][6] annotation 이 달린 클래스는 utility 클래스여야 합니다. private 의 빈 생성자와 final 의 static 메소드만 가질 수 있습니다. 또한 static 변수를 가지며, 다른 클래스나 오브젝트를 참조할 수 있습니다.
 
-在 Application 模块中可以根据需求实现任意多个被 [``@GlideExtension``][6] 注解的类，在 Library 模块中同样如此。当 [``AppGlideModule``][4] 被发现时，所有有效的 [Glide 扩展类][6] 会被合并，所有的选项在 API 中均可以被调用。合并冲突会导致 Glide 的 Annotation Processor 抛出编译错误。
+Application 이나 라이브러리는 [``@GlideExtension``][6] 클래스를 원하는 만큼 구현할 수 있습니다. [``AppGlideModule``][4] 이 있는 경우 구현된 모든 [``@GlideExtension``][6] 는 하나의 API 로 통합(merge)되며, 만약 Conflict 가 날 경우 Glide 의 annotation processor 에 의해 컴파일 에러가 발생하게 됩니다.
 
-被 `@GlideExtention` 注解的类有两种扩展方式：
+`@GlideExtention` 는 두가지 타입의 메소드를 정의 할 수 있습니다.
 
-1. [``GlideOption``][7]  - 为 [``RequestOptions``][3] 添加一个自定义的选项。
-2. [``GlideType``][8] - 添加对新的资源类型的支持(GIF，SVG 等等)。
+1. [``GlideOption``][7]  - [``RequestOptions``][3] 에 커스텀 옵션을 추가할 수 있습니다.
+2. [``GlideType``][8] - 새로운 리소스 타입을 추가 할 수 있습니다. (GIF, SVG 등)
 
 
 #### GlideOption
