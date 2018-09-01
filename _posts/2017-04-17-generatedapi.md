@@ -133,12 +133,12 @@ Application 이나 라이브러리는 [``@GlideExtension``][6] 클래스를 원�
 
 #### GlideOption
 
-用 [``@GlideOption``][7] 注解的静态方法用于扩展 [``RequestOptions``][3] 。``GlideOption`` 可以：
+[``@GlideOption``][7] 은 [``RequestOptions``][3] 를 상속 받은 메소드임을 나타내 줍니다. ``GlideOption`` 은 다음과 같은 경우 유용하게 사용 할 수 있습니다.
 
-1. 定义一个在 Application 模块中频繁使用的选项集合。
-2. 创建新的选项，通常与 Glide 的 [``Option``][10] 类一起使用。
+1. Application 전체에서 자주 사용되는 옵션 그룹을 정의 할 수 있습니다.
+2. 새로운 옵션을 추가 할 수 있습니다. 주로 Glide 의 [``Option``][10] 과 함께 사용 됩니다.
 
-要定义一个选项集合，你可以这么写：
+옵션 그룹을 정의하기 위해서는 아래와 같이 사용할 수 있습니다.
 
 ```java
 @GlideExtension
@@ -156,7 +156,7 @@ public class MyAppExtension {
   }
 ```
 
-这将会在 [``RequestOptions``][3] 的子类中生成一个方法，类似这样：
+상기 코드는 [``RequestOptions``][3] 의 서브 클래스와 메소드를 다음과 같이 생성하게 됩니다.
 
 ```java
 public class GlideOptions extends RequestOptions {
@@ -169,7 +169,7 @@ public class GlideOptions extends RequestOptions {
 }
 ```
 
-你可以为方法任意添加参数，但要保证第一个参数为 [``RequestOptions``][9]。
+첫번째 인수를 [``RequestOptions``][9] 로 정의해 주기만 한다면, 원하는 만큼 인수들을 추가 할 수 있습니다.
 
 ```java
 @GlideOption
@@ -180,7 +180,7 @@ public static void miniThumb(RequestOptions options, int size) {
 }
 ```
 
-在自动生成的方法中新添的参数同样被加了进来：
+위의 코드는 새로 생성된 메소드에 다음과 같이 추가 되게 됩니다.
 
 ```java
 public GlideOptions miniThumb(int size) {
@@ -188,7 +188,7 @@ public GlideOptions miniThumb(int size) {
 }
 ```
 
-之后你就可以使用生成的 ``GlideApp`` 类调用你的自定义方法：
+``GlideApp`` 을 이용하여 새롭게 생성된 커스텀 메소드를 호출 할 수 있습니다.
 
 ```java
 GlideApp.with(fragment)
@@ -197,13 +197,13 @@ GlideApp.with(fragment)
    .into(imageView);
 ```
 
-使用 ``@GlideOption`` 标记的方法应该为静态方法，并且返回值为空。请注意，这些生成的方法在一般的 ``Glide`` 和 ``RequestOptions`` 类里不可用。
+``@GlideOption`` 이 붙은 메소드는 static 함수이며, void 를 리턴하여야 합니다. 또한, 이렇게 생성된 API 들은  ``Glide`` 나 ``RequestOptions`` 클래스에서는 사용할 수 없습니다.
 
 #### GlideType
 
-被 [``@GlideType``][8] 注解的静态方法用于扩展 [``RequestManager``][11] 。被 ``@GlideType`` 注解的方法允许你添加对新的资源类型的支持，包括指定默认选项。
+[``@GlideType``][8] 어노테이션이 붙은 메소드는 [``RequestManager``][11] 를 상속 받게 되어 있습니다. ``@GlideType`` 는 특정 디폴트 옵션들과 함께 새로운 타입을 정의할 수 있게 해줍니다.
 
-例如，为添加对 GIF 的支持，你可以添加一个被 ``@GlideType`` 注解的方法：
+예르 들어, GIF 를 지원하고 싶을 경우, ``@GlideType`` 를 다음과 같이 추가해 줍니다.
 
 ```java
 @GlideExtension
@@ -219,7 +219,7 @@ public class MyAppExtension {
 }
 ```
 
-这样会生成一个包含对应方法的 [``RequestManager``][11] ：
+이럴 경우 [``RequestManager``][11] 에 다음과 같은 메소드가 생성되게 됩니다.
 
 ```java
 public class GlideRequests extends RequesetManager {
@@ -234,7 +234,7 @@ public class GlideRequests extends RequesetManager {
 }
 ```
 
-之后你可以使用生成的 ``GlideApp`` 类调用你的自定义类型：
+``GlideApp`` 를 사용하여 다음과 같이 새로운 타입을 사용할 수 있습니다.
 
 ```java
 GlideApp.with(fragment)
@@ -243,7 +243,7 @@ GlideApp.with(fragment)
   .into(imageView);
 ```
 
-被 ``@GlideType`` 标记的方法必须使用 [``RequestBuilder<T>``][2] 作为其第一个参数，这里的泛型 ``<T>`` 对应 [``@GlideType``][8] 注解中传入的类。该方法应为静态方法，且返回值为空。方法必须定义在一个被 [``@GlideExtension``][6] 注解标记的类中。
+``@GlideType``의 annotation 이 표기된 메소드는 [``RequestBuilder<T>``][2] 를 첫번째 파라미터로 가져야 하며 이떄, ``<T>``의 값은 [``@GlideType``][8] annotation 에서 정의한 클래스 여야 합니다. 메소드는 [``@GlideExtension``][6] 이 명시된 클래스 내에 있어야 하며, static 으로 선언되어야 하며, void 를 리턴 값으로 가져야 합니다.
 
 
 [1]: https://docs.oracle.com/javase/8/docs/api/javax/annotation/processing/Processor.html
