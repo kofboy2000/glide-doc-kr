@@ -1,29 +1,29 @@
 ---
 layout: page
-title: "占位符"
+title: "Placeholders"
 category: doc
 date: 2015-05-19 07:14:23
 order: 4
 disqus: 1
 ---
 
-原文链接：[点击查看](http://bumptech.github.io/glide/doc/placeholders.html){:target="_blank"}
+원문보기：[링크](http://bumptech.github.io/glide/doc/placeholders.html)
 
 * TOC
 {:toc}
 
-### 类型
-Glide允许用户指定三种不同类型的占位符，分别在三种不同场景使用：
+### 타입
+Glide 는 각기 다른 상황에서 사용되는 3종류의 다른 Placeholder 를 제공 합니다.
 
 * [placeholder][1]
 * [error][2]
 * [fallback][3]
 
-#### 占位符(Placeholder)
+#### Placeholder
 
-占位符是当请求正在执行时被展示的 Drawable 。当请求成功完成时，占位符会被请求到的资源替换。如果被请求的资源是从内存中加载出来的，那么占位符可能根本不会被显示。如果请求失败并且没有设置 `error Drawable` ，则占位符将被持续展示。类似地，如果请求的url/model为 ``null`` ，并且 `error Drawable` 和 `fallback` 都没有设置，那么占位符也会继续显示。
+Placeholder 는 요청이 진행 중일 때 나타나는 Drawable 입니다. 요청이 성공적으로  이뤄지면 Placeholder 는 요청된 리소스로 교체 되게 됩니다. 만약에 요청된 리소스가 메모리에서 부터 온다면, Placeholder 가 나타날 일은 없으나,  `error Drawable` 이 별도로 없는 상태에서 요청이 실패할 경우 Placeholder 는 계속 보여지게 될 것 입니다.비슷한 상황으로, url/model 이 ``null`` 일 때 `error Drawable` 이나 `fallback` 이 없을 경우 Placeholder 가 계속 보여질 것 입니다.
 
-使用 [generated API][4] ：
+[generated API][4] 에서는 아래와 같이 사용되거나,
 
 ```java
 GlideApp.with(fragment)
@@ -32,7 +32,7 @@ GlideApp.with(fragment)
   .into(view);
 ```
 
-Or:
+또는 다음과 같이 사용 될 수 있습니다.
 
 ```java
 GlideApp.with(fragment)
@@ -41,11 +41,11 @@ GlideApp.with(fragment)
   .into(view);
 ```
 
-#### 错误符(Error)
+#### Error
 
-`error Drawable` 在请求永久性失败时展示。`error Drawable` 同样也在请求的url/model为 ``null`` ，且并没有设置 `fallback Drawable` 时展示。
+`error Drawable` 은 요청이 최종적으로 실패할 경우 나타나게 됩니다. `error Drawable` 은 url/model 이 ``null`` 이거나 `fallback Drawable` 이 별도로 설정 되어 있지 않은 경우 나타기도 합니다.
 
-With the [generated API][4]:
+ [generated API][4] 에서는 아래와 같이 사용되거나,
 
 ```java
 GlideApp.with(fragment)
@@ -54,7 +54,7 @@ GlideApp.with(fragment)
   .into(view);
 ```
 
-Or:
+또는 다음과 같이 사용 될 수 있습니다.
 
 ```java
 GlideApp.with(fragment)
@@ -63,11 +63,10 @@ GlideApp.with(fragment)
   .into(view);
 ```
 
-#### 后备回调符(Fallback)
-`fallback Drawable` 在请求的url/model为 ``null`` 时展示。设计 `fallback Drawable` 的主要目的是允许用户指示 ``null`` 是否为可接受的正常情况。例如，一个 ``null`` 的个人资料 url 可能暗示这个用户没有设置头像，因此应该使用默认头像。然而，``null`` 也可能表明这个元数据根本就是不合法的，或者取不到。
-默认情况下Glide将 ``null`` 作为错误处理，所以可以接受 ``null`` 的应用应当显式地设置一个 `fallback Drawable` 。
+#### Fallback
+`fallback Drawable` 은 요청한 url/model 이 ``null`` 일 경우 나타납니다. `fallback Drawable` 의 주요 목적은 사용자로 하여금 ``null`` 이 예상되는지 여부를 표시할 수 있도록 하는 것 입니다. 예를 들어, 프로필 사진이 ``null`` url 인 경우 이를 아직 프로필 사진이 설정되지 않는 경우로 보고 기본 이미지를 사용해야 될 수 있습니다. 그런데 ``null`` 이 meta-data 를 잘못 설정된 상태이거나 해당 url 을 검색할 수 없는 상황일 수도 있습니다. 기본적으로 Glide 는 ``null`` url/model 을 error 로 취급합니다. 따라서 ``null`` 에 대한 예측 상황이 따로 있는 경우 `fallback Drawable` 을 설정해 주어야 합니다.
 
-使用 [generated API][4]：
+ [generated API][4] 에서는 아래와 같이 사용되거나,
 
 ```java
 GlideApp.with(fragment)
@@ -76,7 +75,7 @@ GlideApp.with(fragment)
   .into(view);
 ```
 
-Or:
+또는 다음과 같이 사용 될 수 있습니다.
 
 ```java
 GlideApp.with(fragment)
@@ -87,14 +86,14 @@ GlideApp.with(fragment)
 
 ### FAQ
 
-##### 占位符是异步加载的吗？
-No。占位符是在主线程从Android Resources加载的。我们通常希望占位符比较小且容易被系统资源缓存机制缓存起来。
+##### placeholder 비동기적으로 로드 되나요？
+아닙니다. placeholders 는 Main Thread 상에서 Android Resources 를 가져옵니다. Placeholder 는 대개 작거나 시스템 캐시화 되기 쉬운 것으로 설정하는 것이 좋습니다.
 
-##### 变换是否会被应用到占位符上？
-No。Transformation仅被应用于被请求的资源，而不会对任何占位符使用。例如你正在加载圆形图片，你可能希望在你的应用中包含圆形的占位符。但是你也可以考虑自定义一个View来剪裁(clip)你的占位符，达到你的transformation的效果。
+##### Transformation 이 placeholder 에도 적용 되나요?
+아닙니다. Transformation 은 요청된 리소스에만 적용되며, placeholder 에는 적용되지 않습니다. 런타임에 Transform 해야 되는 리소스를 어플리케이션 내에 가지고 있는 것은 비효율적 입니다. 거의 모든 경우, 꼭 필요로 하는 크기와 형태의 리소르만 포함하는 것이 더 효율적 입니다. 만약 원형의 이미지를 로딩해야 한다면, 원형의 placeholder 를 가져야 할 것 입니다. 또는, Transform 과 같은 방식으로 placeholder 를 자르는 커스텀 뷰를 고려할 수도 있습니다.
 
-##### 在多个不同的View上使用相同的Drawable可行么？
-通常可以，但不是绝对的。任何无状态(`non-stateful`)的 Drawable（例如 `BitmapDrawable` ）通常都是ok的。但是有状态的 Drawable 不一样，在同一时间多个 View 上展示它们通常不是很安全，因为多个View会立刻修改(`mutate`) Drawable 。对于有状态的 Drawable ，建议传入一个资源ID，或者使用 `newDrawable()` 来给每个请求传入一个新的拷贝。
+##### 여러개의 View 에서 같은 Drawable 을 placeholder 로 사용해도 되나요?
+보통은 그렇지만 항상 그렇지는 않습니다. `BitmapDrawable`과 같은 무상태(`non-stateful`) 적 Drawable 은 다수의 View 에서 동시에 사용되도 괜찮지만, 상태를 가지는(`stateful`) Drawable 의 경우 다수의 View 에서 동시에 보여지도록 하는 것은, 다수의 View 가 상태를 변형 (`mutate`) 시킬수 있기에 안전하지 않습니다. 상태를 가지는(`stateful`) Drawable 을 사용할 때는 리소스 id 를 넘기거나 `newDrawable()` 를 사용하여 요청별 새로운 카피를 만드는 것이 좋습니다.
 
 [1]: {{ site.baseurl }}/javadocs/400/com/bumptech/glide/request/RequestOptions.html#placeholder-int-
 [2]: {{ site.baseurl }}/javadocs/400/com/bumptech/glide/request/RequestOptions.html#error-int-
