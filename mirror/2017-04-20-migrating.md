@@ -477,4 +477,3 @@ To make sure you only use your ``ModelLoader`` for certain models, implement ``h
 [32]: https://developer.android.com/reference/android/graphics/Bitmap.Config.html#RGB_565
 [33]: https://developer.android.com/reference/android/graphics/Bitmap.Config.html#ARGB_8888
 [34]: download-setup.html
-[35]: {{ site.baseurl }}/doc/configuration.html#registering-components
