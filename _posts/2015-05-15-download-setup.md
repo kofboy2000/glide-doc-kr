@@ -24,7 +24,7 @@ translators: [kofboy2000]
 
 ```groovy
 dependencies {
-  implementation ("com.github.bumptech.glide:glide:4.7.1") {
+  implementation ("com.github.bumptech.glide:glide:4.8.0") {
     exclude group: "com.android.support"
   }
   implementation "com.android.support:support-fragment:26.1.0"
@@ -60,8 +60,8 @@ repositories {
 }
 
 dependencies {
-    compile 'com.github.bumptech.glide:glide:4.7.1'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
+    compile 'com.github.bumptech.glide:glide:4.8.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
 }
 ```
 
@@ -69,7 +69,7 @@ dependencies {
 
 ```groovy
 dependencies {
-    implementation ("com.github.bumptech.glide:glide:4.7.1@aar") {
+    implementation ("com.github.bumptech.glide:glide:4.8.0@aar") {
         transitive = true
     }
 }
@@ -100,7 +100,7 @@ Maven 을 사용하신다면 Glide 를 dependency 에 추가하여 사용 하실
 <dependency>
   <groupId>com.github.bumptech.glide</groupId>
   <artifactId>glide</artifactId>
-  <version>4.7.1</version>
+  <version>4.8.0</version>
   <type>aar</type>
 </dependency>
 <dependency>
@@ -111,7 +111,7 @@ Maven 을 사용하신다면 Glide 를 dependency 에 추가하여 사용 하실
 <dependency>
   <groupId>com.github.bumptech.glide</groupId>
   <artifactId>compiler</artifactId>
-  <version>4.7.1</version>
+  <version>4.8.0</version>
   <optional>true</optional>
 </dependency>
 ```
@@ -238,7 +238,7 @@ Kotlin 으로 구현된 클래스에서 Glide의 annotation 을 사용하는 경
 
 ```groovy
 dependencies {
-  kapt 'com.github.bumptech.glide:compiler:4.7.1'
+  kapt 'com.github.bumptech.glide:compiler:4.8.0'
 }
 ```
 

@@ -41,7 +41,7 @@ Application 에서 Generated API 를 사용하려면 두 단계를 수행하셔�
    }
 
    dependencies {
-     annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
+     annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
    }
    ```
 
@@ -75,7 +75,7 @@ geneated API 를 사용하기 위해 꼭 특정 함수를 구현해야 하지 �
 
    ```groovy
    dependencies {
-     kapt 'com.github.bumptech.glide:compiler:4.7.1'
+     kapt 'com.github.bumptech.glide:compiler:4.8.0'
    }
    ```
   ``build.gradle`` 파일에 ``kotlin-kapt`` 추가 하는 것을 잊지 마시기 바랍니다.
@@ -89,7 +89,7 @@ geneated API 를 사용하기 위해 꼭 특정 함수를 구현해야 하지 �
    ```groovy
    dependencies {
      kapt "android.arch.lifecycle:compiler:1.0.0"
-     kapt 'com.github.bumptech.glide:compiler:4.7.1'
+     kapt 'com.github.bumptech.glide:compiler:4.8.0'
    }
    ```
 
