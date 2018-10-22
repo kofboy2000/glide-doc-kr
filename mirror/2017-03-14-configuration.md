@@ -33,8 +33,8 @@ public class FlickrGlideModule extends AppGlideModule {
 
 Including Glide's annotation processor requires dependencies on Glide's annotations and the annotation processor:
 ```groovy
-compile 'com.github.bumptech.glide:annotations:4.7.1'
-annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
+compile 'com.github.bumptech.glide:annotations:4.8.0'
+annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
 ```
 
 Finally, you should keep AppGlideModule implementations in your ``proguard.cfg``:
@@ -46,7 +46,7 @@ Finally, you should keep AppGlideModule implementations in your ``proguard.cfg``
 #### Libraries
 Libraries that do not register custom components do not need to perform any configuration steps and can skip the sections on this page entirely.
 
-Libraries that do need to register a custom component, like a ``ModelLoader``, can do the following: 
+Libraries that do need to register a custom component, like a ``ModelLoader``, can do the following:
 
 1. Add one or more [``LibraryGlideModule``][2] implementations that register the new components.
 2. Add the [``@GlideModule``][5] annotation to every [``LibraryGlideModule``][2] implementation
@@ -65,13 +65,13 @@ public final class OkHttpLibraryGlideModule extends LibraryGlideModule {
 
 Using the [``@GlideModule``][5] annotation requires a dependency on Glide's annotations:
 ```groovy
-compile 'com.github.bumptech.glide:annotations:4.7.1'
+compile 'com.github.bumptech.glide:annotations:4.8.0'
 ```
 
 ##### Avoid AppGlideModule in libraries
-Libraries must **not** include ``AppGlideModule`` implementations. Doing so will prevent any applications that depend on the library from managing their dependencies or configuring options like Glide's cache sizes and locations. 
+Libraries must **not** include ``AppGlideModule`` implementations. Doing so will prevent any applications that depend on the library from managing their dependencies or configuring options like Glide's cache sizes and locations.
 
-In addition, if two libraries include ``AppGlideModule``s, applications will be unable to compile if they depend on both and will be forced to pick one or other other. 
+In addition, if two libraries include ``AppGlideModule``s, applications will be unable to compile if they depend on both and will be forced to pick one or other other.
 
 This does mean that libraries won't be able to use Glide's generated API, but loads with ``RequestOptions`` will still work just fine (see the [options page][42] for examples).
 
@@ -79,7 +79,7 @@ This does mean that libraries won't be able to use Glide's generated API, but lo
 Glide allows applications to use [``AppGlideModule``][1] implementations to completely control Glide's memory and disk cache usage. Glide tries to provide reasonable defaults for most applications, but for some applications, it will be necessary to customize these values. Be sure to measure the results of any changes to avoid performance regressions.
 
 #### Memory cache
-By default, Glide uses [``LruResourceCache``][10], a default implementation of the [``MemoryCache``][9] interface that uses a fixed amount of memory with LRU eviction. The size of the [``LruResourceCache``][10] is determined by Glide's [``MemorySizeCalculator``][11] class, which looks at the device memory class, whether or not the device is low ram and the screen resolution. 
+By default, Glide uses [``LruResourceCache``][10], a default implementation of the [``MemoryCache``][9] interface that uses a fixed amount of memory with LRU eviction. The size of the [``LruResourceCache``][10] is determined by Glide's [``MemorySizeCalculator``][11] class, which looks at the device memory class, whether or not the device is low ram and the screen resolution.
 
 Applications can customize the [``MemoryCache``][9] size in their [``AppGlideModule``][1] with the [``applyOptions(Context, GlideBuilder)``][12] method by configuring [``MemorySizeCalculator``][11]:
 
@@ -96,7 +96,7 @@ public class YourAppGlideModule extends AppGlideModule {
 }
 ```
 
-Applications can also directly override the cache size: 
+Applications can also directly override the cache size:
 
 ```java
 @GlideModule
@@ -138,7 +138,7 @@ public class YourAppGlideModule extends AppGlideModule {
 }
 ```
 
-Applications can also directly override the pool size: 
+Applications can also directly override the pool size:
 
 ```java
 @GlideModule
@@ -171,7 +171,7 @@ Applications can change the location to external storage if the media they displ
 public class YourAppGlideModule extends AppGlideModule {
   @Override
   public void applyOptions(Context context, GlideBuilder builder) {
-    builder.setDiskCache(new ExternalDiskCacheFactory(context));
+    builder.setDiskCache(new ExternalCacheDiskCacheFactory(context));
   }
 }
 ```
@@ -183,7 +183,7 @@ public class YourAppGlideModule extends AppGlideModule {
   @Override
   public void applyOptions(Context context, GlideBuilder builder) {
     int diskCacheSizeBytes = 1024 * 1024 * 100; // 100 MB
-    builder.setDiskCache(new InternalDiskCacheFactory(context, diskCacheSizeBytes));
+    builder.setDiskCache(new InternalCacheDiskCacheFactory(context, diskCacheSizeBytes));
   }
 }
 ```
@@ -196,7 +196,7 @@ public class YourAppGlideModule extends AppGlideModule {
   public void applyOptions(Context context, GlideBuilder builder) {
     int diskCacheSizeBytes = 1024 * 1024 * 100; // 100 MB
     builder.setDiskCache(
-        new InternalDiskCacheFactory(context, "cacheFolderName", diskCacheSizeBytes));
+        new InternalCacheDiskCacheFactory(context, "cacheFolderName", diskCacheSizeBytes));
   }
 }
 ```
@@ -313,7 +313,7 @@ public class YourLibraryGlideModule extends LibraryGlideModule {
 }
 ```
 
-Any number of components can registered in a single ``GlideModule``. Certain types, including [``ModelLoader``][23]s and [``ResourceDecoder``][24]s can have multiple implementations with the same type arguments. 
+Any number of components can registered in a single ``GlideModule``. Certain types, including [``ModelLoader``][23]s and [``ResourceDecoder``][24]s can have multiple implementations with the same type arguments.
 
 
 #### Anatomy of a load
@@ -324,19 +324,19 @@ The set of registered components, including both those registered by default in 
 3. Resource -> Transcoded Resource (optional, handled by ``ResourceTranscoder``s).
 
 ``Encoder``s can write Data to Glide's disk cache cache before step 2.
-``ResourceEncoder``s can write Resource's to Glide's disk cache before step 3. 
+``ResourceEncoder``s can write Resource's to Glide's disk cache before step 3.
 
 When a request is started, Glide will attempt all available paths from the Model to the requested Resource type. A request will succeed if any load path succeeds. A request will fail only if all available load paths fail.  
 
 #### Ordering Components
 
-The ``prepend()``, ``append()``, and ``replace()`` methods in [``Registry``][28] can be used to set the order in which Glide will attempt each ``ModelLoader`` and ``ResourceDecoder``.  Ordering components allows you to register components that handle specific subsets of models or data (IE only certain types of Uris, or only certain image formats) while also having an appended catch-all component to handle the rest. 
+The ``prepend()``, ``append()``, and ``replace()`` methods in [``Registry``][28] can be used to set the order in which Glide will attempt each ``ModelLoader`` and ``ResourceDecoder``.  Ordering components allows you to register components that handle specific subsets of models or data (IE only certain types of Uris, or only certain image formats) while also having an appended catch-all component to handle the rest.
 
 ##### prepend()
-To handle subsets of existing data where you do want to fall back to Glide's default behavior if your ``ModelLoader`` or ``ResourceDecoder`` fails, using ``prepend()``. ``prepend()`` will make sure that your ``ModelLoader`` or ``ResourceDecoder`` is called before all other previously registered components and can run first. If your ``ModelLoader`` or ``ResourceDecoder`` returns ``false`` from its ``handles()`` method or fails, all other ``ModelLoader``s or ``ResourceDecoders`` will be called in the order they're registered, one at a time, providing a fallback. 
+To handle subsets of existing data where you do want to fall back to Glide's default behavior if your ``ModelLoader`` or ``ResourceDecoder`` fails, using ``prepend()``. ``prepend()`` will make sure that your ``ModelLoader`` or ``ResourceDecoder`` is called before all other previously registered components and can run first. If your ``ModelLoader`` or ``ResourceDecoder`` returns ``false`` from its ``handles()`` method or fails, all other ``ModelLoader``s or ``ResourceDecoders`` will be called in the order they're registered, one at a time, providing a fallback.
 
 ##### append()
-To handle new types of data or to add a fallback to Glide's default behavior, using ``append()``. ``append()`` will make sure that your ``ModelLoader`` or ``ResourceDecoder`` is called only after Glide's defaults are attempted. If you're trying to handle subtypes that Glide's default components handle (like a specific Uri authority or subclass), you may need to use ``prepend()`` to make sure Glide's default component doesn't load the resource before your custom component. 
+To handle new types of data or to add a fallback to Glide's default behavior, using ``append()``. ``append()`` will make sure that your ``ModelLoader`` or ``ResourceDecoder`` is called only after Glide's defaults are attempted. If you're trying to handle subtypes that Glide's default components handle (like a specific Uri authority or subclass), you may need to use ``prepend()`` to make sure Glide's default component doesn't load the resource before your custom component.
 
 ##### replace()
 To completely replace Glide's default behavior and ensure that it doesn't run, use ``replace()``. ``replace()`` removes all ``ModelLoaders`` that handle the given model and data classes and then adds your ``ModelLoader`` instead. ``replace()`` is useful in particular for swapping out Glide's networking logic with a library like OkHttp or Volley, where you want to make sure that only OkHttp or Volley are used.
@@ -384,18 +384,18 @@ public class YourAppGlideModule extends AppGlideModule {
 
 
 ### Module classes and annotations.
-Glide v4 relies on two classes, [``AppGlideModule``][1] and [``LibraryGlideModule``][2], to configure the Glide singleton. Both classes are allowed to register additional components, like [``ModelLoaders``][3], [``ResourceDecoders``][4] etc. Only the [``AppGlideModules``][1] are allowed to configure application specific settings, like cache implementations and sizes. 
+Glide v4 relies on two classes, [``AppGlideModule``][1] and [``LibraryGlideModule``][2], to configure the Glide singleton. Both classes are allowed to register additional components, like [``ModelLoaders``][3], [``ResourceDecoders``][4] etc. Only the [``AppGlideModules``][1] are allowed to configure application specific settings, like cache implementations and sizes.
 
 #### AppGlideModule
 All applications must add a [``AppGlideModule``][1] implementation, even if the Application is not changing any additional settings or implementing any methods in [``AppGlideModule``][1]. The [``AppGlideModule``][1] implementation acts as a signal that allows Glide's annotation processor to generate a single combined class with with all discovered [``LibraryGlideModules``][2].
 
-There can be only one [``AppGlideModule``][1] implementation in a given application (having more than one produce errors at compile time). As a result, libraries must never provide a [``AppGlideModule``][1] implementation. 
+There can be only one [``AppGlideModule``][1] implementation in a given application (having more than one produce errors at compile time). As a result, libraries must never provide a [``AppGlideModule``][1] implementation.
 
 #### @GlideModule
-In order for Glide to properly discover [``AppGlideModule``][1] and [``LibraryGlideModule``][2] implementations, all implementations of both classes must be annotated with the [``@GlideModule``][5] annotation. The annotation will allow Glide's [annotation processor][6] to discover all implementations at compile time. 
+In order for Glide to properly discover [``AppGlideModule``][1] and [``LibraryGlideModule``][2] implementations, all implementations of both classes must be annotated with the [``@GlideModule``][5] annotation. The annotation will allow Glide's [annotation processor][6] to discover all implementations at compile time.
 
 #### Annotation Processor
-In addition, to enable discovery of the [``AppGlideModule``][1] and [``LibraryGlideModules``][2] all libraries and applications must also include a dependency on Glide's annotation processor. 
+In addition, to enable discovery of the [``AppGlideModule``][1] and [``LibraryGlideModules``][2] all libraries and applications must also include a dependency on Glide's annotation processor.
 
 ### Conflicts
 Applications may depend on multiple libraries, each of which may contain one or more [``LibraryGlideModules``][2]. In rare cases, these [``LibraryGlideModules``][2] may define conflicting options or otherwise include behavior the application would like to avoid. Applications can resolve these conflicts or avoid unwanted dependencies by adding an [``@Excludes``][20] annotation to their [``AppGlideModule``][1].
