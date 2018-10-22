@@ -1,34 +1,34 @@
 ---
 layout: page
-title: "变换"
+title: "Transformations"
 category: doc
 date: 2015-05-21 20:04:53
 order: 6
 disqus: 1
 ---
 
-原文链接：[点击查看](http://bumptech.github.io/glide/doc/transformations.html){:target="_blank"}
+원문보기：[링크](http://bumptech.github.io/glide/doc/transformations.html)
 
 * TOC
 {:toc}
 
-### 关于变换
+### Transformations 란
 
-在Glide中，[Transformations][1] 可以获取资源并修改它，然后返回被修改后的资源。通常变换操作是用来完成剪裁或对位图应用过滤器，但它也可以用于转换GIF动画，甚至自定义的资源类型。
+Glide 의 [Transformations][1] 는 리소스를 가져와 변형 한 다음, 변형 된 리소스를 리턴 합니다. 일반적으로 transformations 는 이미지를 자르거나 비트맵에 필터를 적용하는데 사용되나, 움직이는 GIF 나 사용자 정의 커스텀 리소스 타입을 변환하는데 사용 할 수도 있습니다.
 
-### 内置类型
+### 기본 제공 타입
 
-Glide 提供了很多内置的变换，包括：
+Glide 에는 다음과 같이 몇가지 기본 transformations 을 포함하고 있습니다. ：
 
 * [CenterCrop][4]
 * [FitCenter][2]
 * [CircleCrop][6]
 
-### 应用
+### 적용
 
-通过 [RequestOptions][9] 类可以应用变换：
+[RequestOptions][9] 를 사용해서 transformations 을 적용 할 수 있습니다. ：
 
-#### 默认变换
+#### 디폴트 Transformations
 
 ```java
 RequestOptions options = new RequestOptions();
@@ -40,7 +40,7 @@ Glide.with(fragment)
     .into(imageView);
 ```
 
-大多数内置的变换都有静态的 import ，这是为 API 的流畅性考虑的。例如，你可以通过静态方法应用一个 [FitCenter][2] 变换：
+기본 제공 하는 transformations 은 static import 를 지원 합니다. 예를 들어  [FitCenter][2] 는 static 메소드를 사용해 추가 할 수 있습니다. ：
 
 ```java
 import static com.bumptech.glide.request.RequestOptions.fitCenterTransform;
@@ -51,7 +51,7 @@ Glide.with(fragment)
     .into(imageView);
 ```
 
-如果你正在使用 [Generated API][16] ，那么这些变换方法已经被内联了，所以使用起来甚至更为轻松：
+만약 [Generated API][16] 를 사용한다면 transfomrations 는 inline 되어 있기 때문에 더 사용하기 쉽습니다.
 
 ```java
 GlideApp.with(fragment)
@@ -60,15 +60,15 @@ GlideApp.with(fragment)
   .into(imageView);
 ```
 
-可以查阅 [Options][3] 页来获得更多 `RequestOption` 的相关信息。
+ `RequestOption` 에 대해 더 알고 싶으시다면 [Options][3] 페이지를 참고 하세요.
 
-#### 多重变换
+#### 다중 Transformations
 
-默认情况下，每个 [``transform()``][17] 调用，或任何特定转换方法(``fitCenter()``, ``centerCrop()``, ``bitmapTransform()`` etc)的调用都会替换掉之前的变换。
+기본적으로 [``transform()``][17] 을 하나의 로드에 여러개를 하나씩 적용하게 된다면 (``fitCenter()``, ``centerCrop()``, ``bitmapTransform()`` etc) 이전의 적용된 것을 덮어쓰게 됩니다.
 
-如果你想在单次加载中应用多个变换，请使用 [``MultiTransformation``][18] 类。
+따라서 하나의 로드에 여러개의 Transformation 을 사용하기 보다는 [``MultiTransformation``][18] 나 숏컷 메소드인 [``.transforms()``][19] 메소를 사용하는 것이 좋습니다.
 
-使用 [generated API][16]:
+[generated API][16] 에서 사용할 경우 :
 
 ```java
 Glide.with(fragment)
@@ -76,7 +76,8 @@ Glide.with(fragment)
   .transform(new MultiTransformation(new FitCenter(), new YourCustomTransformation())
   .into(imageView);
 ```
-或结合使用快捷方法和 [generated API][16]：
+
+[generated API][16] 의 숏컷 메소드를 사용 하는 경우 ：
 
 ```java
 GlideApp.with(fragment)
@@ -85,11 +86,11 @@ GlideApp.with(fragment)
   .into(imageView);
 ```
 
-请注意，你向 [``MultiTransformation``][18] 的构造器传入变换参数的顺序，决定了这些变换的应用顺序。
+[``MultiTransformation``][18] 의 생성자에 전달하는 Transformations 의 순서대로 각각의 Transformations 이 순차적으로 적용 됩니다.
 
-### 定制变换
+### 사용자 정의 Transformations
 
-尽管 Glide 提供了各种各样的内置 [``Transformation``][1] 实现，如果你需要额外的功能，你也可以实现你自己的 [``Transformation``][2]。
+비록 Glide 에서 다양한 기본 [``Transformation``][1] 를 제공하고즌 있지만 경우에 따라 추가 기능을 위해 사용자 정의의 [``Transformation``][2] 가 필요한 경우도 있을 것 입니다.
 
 #### BitmapTransformation
 
@@ -211,5 +212,3 @@ Glide可以将 ``Bitmap`` ``Transformation``应用到 ``BitmapDrawable`` , ``Gif
 [19]: {{ site.baseurl }}/javadocs/410/com/bumptech/glide/request/RequestOptions.html#transforms-com.bumptech.glide.load.Transformation...-
 [20]: {{ site.baseurl }}/javadocs/440/com/bumptech/glide/load/resource/bitmap/BitmapTransformation.html
 [21]: {{ site.baseurl }}/javadocs/440/com/bumptech/glide/load/resource/bitmap/RoundedCorners.html
-
-
