@@ -94,9 +94,9 @@ GlideApp.with(fragment)
 
 #### BitmapTransformation
 
-如果你只需要变换 ``Bitmap``，最好是从继承 [``BitmapTransformation``][20] 开始。``BitmapTransformation`` 为我们处理了一些基础的东西，例如，如果你的变换返回了一个新修改的 Bitmap ，``BitmapTransformation``将负责提取和回收原始的 Bitmap。
+``Bitmap`` 만 변환하고 싶다면 [``BitmapTransformation``][20] 클래스를 확장하는 것을 추천 드립니다. ``BitmapTransformation`` 은 수정된 Bitmap 을 반환하고 난 후 원래의 Bitmap 을 재활용 하는 등 몇가지 기본적인 사항을 처리 합니다.
 
-一个简单的实现看起来可能像这样：
+간단하게 구현된 모습은 아래와 같습니다. ：
 
 ```java
 public class FillSpace extends BitmapTransformation {
@@ -130,19 +130,19 @@ public class FillSpace extends BitmapTransformation {
 }
 ```
 
-尽管你的 ``Transformation`` 将几乎确定比这个示例更复杂，但它应该包含了相同的基本元素和复写方法。
+여러분이 작성할 ``Transformation`` 이 위의 예제보다 분명 더 복잡할 테지만, 기본적인 부분과 메소드 오버라이드는 꼭 포함해야 합니다.
 
-#### 必需的方法
+#### 필수 메소드
 
-请特别注意，对于任何 ``Transformation`` 子类，包括 ``BitmapTransformation``，你都有三个方法你 **必须** 实现它们，以使得磁盘和内存缓存正确地工作：
+특히, ``BitmapTransformation`` 포함 어떠한 ``Transformation` 서브 클래스들은 디스크나 메모리 캐싱이 올바르게 동작하기 위해서는 3가지 필수  메소드를 *필히** 구현하여야 합니다.：
 
 1. ``equals()``
 2. ``hashCode()``
 3. ``updateDiskCacheKey``
 
-如果你的 [``Transformation``][1] 没有参数，通常使用一个包含完整包限定名的 ``static`` ``final`` ``String`` 来作为一个 ID，它可以构成 ``hashCode()`` 的基础，并可用于更新 ``updateDiskCacheKey()`` 传入的 ``MessageDigest``。如果你的 [``Transformation``][1] 需要参数而且它会影响到 ``Bitmap`` 被变换的方式，它们也必须被包含到这三个方法中。
+만약 [``Transformation``][1] 이 별도의 아규먼트(arguments) 를 가지지 않는다면, ``static`` ``final`` ``String`` 의 전체 패키지명의 ID 를 ``hashCode()`` 에 사용하고, ``updateDiskCacheKey()`` 에는 ``MessageDigest`` 를 사용하는 것이 좋습니다. 만약 [``Transformation``][1] 이 ``Bitmap`` 변환에 영향을 미치는 아규먼트(argments) 를 가지는 상황에서도 위 3가지 메소드는 포함하고 있어야 합니다.
 
-例如，Glide 的 [``RoundedCorners``][21] 变换接受一个 ``int``，它决定了圆角的弧度。它的``equals()``, ``hashCode()`` 和 ``updateDiskCacheKey`` 实现看起来像这样：
+예를 들의 Glide 의 [``RoundedCorners``][21] 는 라운드 코너의 반경(radius) 을 정하는 ``int`` 값을 가지는데, 이에 해당하는 ``equals()``, ``hashCode()``, ``updateDiskCacheKey`` 의 구현은 아래와 같습니다. ：
 
 ```java
   @Override
@@ -169,28 +169,28 @@ public class FillSpace extends BitmapTransformation {
   }
 ```
 
-原来的 ``String`` 仍然保留，但 ``roundingRadius`` 被包含到了三个方法中。这里，``updateDiskCacheKey`` 方法还演示了你可以如何使用 ``ByteBuffer`` 来包含基本参数到你的 ``updateDiskCacheKey`` 实现中。
+본래의 ``String`` id 와 함께 ``roundingRadius`` 가 3개의 모든 메소드에 포함된 것을 확인할 수 있습니다. ``updateDiskCacheKey`` 를 보면 어떻게 ``ByteBuffer`` 를 사용해 기본 아규먼트를 ``updateDiskCacheKey``를 구현에 사용 하는지 보여주고 있습니다.
 
-#### 不要忘记 equals() / hashCode()!
+#### equals() / hashCode() 을 잊지 마세요!
 
-值得重申的一点是，为了让内存缓存正常地工作你是否必须实现 ``equals()`` 和 ``hashCode()`` 方法。很不幸，即使你没有复写这两个方法，``BitmapTransformation`` 和 ``Transformation`` 也能通过编译，但这并不意味着它们能正常工作。我们正在探索一些方案，以使在 Glide 的未来版本中，使用默认的 ``equals()`` 和 ``hashCode`` 方法将抛出一个编译时错误。
+equals() / hashCode() 에 대해서 한번 더 언급할 가치가 있어 보입니다. ``equals()`` 와 ``hashCode()`` 는 메모리 캐싱을 위해 꼭 구현하셔야 합니다. 안타깝게도 ``BitmapTransformation`` 와 ``Transformation`` 는 위 두 함수가 오버라이드가 되어 있지 않더라도 컴파일이 될 것 입니다. 컴파일이 된다는 말이 올바르게 동작할 것을 보장한다는 말이 아닙니다. Glide 추후 버전에서는 기본 ``equals()`` 나 ``hashCode`` 만 있을 경우 컴파일 타임 에러를 발생시키는 옵션을 추가할 예정 입니다.
 
-### Glide中的特殊行为
+### Glide 특수 동작
 
-#### 重用变换
-``Transformation`` 的设计初衷是无状态的。因此，在多个加载中复用 ``Transformation`` 应当总是安全的。创建一次 ``Transformation`` 并在多个加载中使用它，通常是很好的实践。
+#### Transformations 재사용
+``Transformations`` 는 비상태기반(stateless) 이기에, ``Transformation``을 다수의 로드에서 사용할 경우 인스턴스를 재사용 하는 것이 안전 합니다. 대개 하나의 ``Transformation`` 을 만들고 이를 다수의 로드에 패스하는 것이 좋은 사용법이라 할 수 있습니다.
 
-#### ImageView的自动变换
-在Glide中，当你为一个 [ImageView][7] 开始加载时，Glide可能会自动应用 [FitCenter][2] 或 [CenterCrop][4] ，这取决于view的 [ScaleType][8] 。如果 `scaleType` 是 ``CENTER_CROP`` , Glide 将会自动应用 ``CenterCrop`` 变换。如果 `scaleType` 为 ``FIT_CENTER`` 或 ``CENTER_INSIDE`` ，Glide会自动使用 ``FitCenter`` 变换。
+#### ImageView 자동 변환
+Glide 를 사용해서 [ImageView][7] 에 로드 할 경우 Glide 는 자동적으로 [FitCenter][2] 나 [CenterCrop][4] 을 view 의 [ScaleType][8] 에 맞추어 적용해 줍니다. 만약 `scaleType` 이 ``CENTER_CROP`` 이라면, Glide 는 자동적으로 ``CenterCrop`` 을 적용 할 것이며, `scaleType` 이 ``FIT_CENTER`` 나 ``CENTER_INSIDE`` 라면 ``FitCenter`` 를 적용 합니다.
 
-当然，你总有权利覆写默认的变换，只需要一个带有 ``Transformation`` 集合的 [RequestOptions][9] 即可。另外，你也可以通过使用 [``dontTransform()``][10] 确保不会自动应用任何变换。
+[RequestOptions][9] 을 사용할 경우 ``Transformation`` 셋(set)으로 기본 변환을 오버라이드 할 수 있습니다. 추가적으로 [``dontTransform()``][10] 사용하면 ``Transformation`` 이 자동 적용 되지 않도록 할 수 있습니다.
 
-#### 自定义资源
-因为 Glide 4.0 允许你指定你将解码的资源的父类型，你可能无法确切地知道将会应用何种变换。例如，当你使用 [``asDrawable()``][11] (或就是普通的 ``with()`` ，因为 ``asDrawable()`` 是默认情形)来加载 Drawable 资源时，你可能会得到 [``BitmapDrawable``][12] 子类，也有可能得到 [``GifDrawable``][13] 子类。
+#### 커스텀 리소스
+Glide 4.0 은 디코딩 하고자 하는 리소스의 super 타입을 지정할 수 있기에 정확하게 어떤 타입의 transfromation 을 적용해야할지 모르는 경우가 있을 수 있습니다. 예를 들어, [``asDrawable()``][11] (혹은 ``asDrawable()`` 이 기본이기에  ``with()``) 를 Drawable 요청에 사용할 경우 [``BitmapDrawable``][12] 이나 [``GifDrawable``][13] 서브 클래스를 얻게 될 수 있습니다.
 
-为了确保你添加到 ``RequestOptions`` 中的任何变换都会被使用，Glide将 ``Transformation`` 添加到一个Map中保存，其Key为你提供变换的资源类型。当资源被成功解码时，Glide使用这个Map来取回对应的 ``Transformation`` 。
+``RequestOptions`` 에 추가되는 어떠한 ``Transformation`` 도 사용 가능하다록 하기 위해, Glide 는 [``transform()``][14] 에 제공하는 리소스를 키로 사용하는 Map 에 ``Transformation`` 을 추가합니다. 리소스가 성공적으로 디코드 되면, Glide 는 이 Map 을 탐색하여 해당 리소스에 맞는 ``Transformation`` 을 반환하게 됩니다.
 
-Glide可以将 ``Bitmap`` ``Transformation``应用到 ``BitmapDrawable`` , ``GifDrawable`` , 以及 ``Bitmap`` 资源上，因此通常你只需要编写和应用 ``Bitmap`` ``Transformation`` 。然而，如果你添加了额外的资源类型，你可能需要考虑派生 [``RequestOptions``][15] 类，并且，在内置的这些 ``Bitmap`` ``Transformations`` 之外，你还需要为你的自定义资源类型提供一个 ``Transformation`` 。
+Glide 는 ``Bitmap`` ``Transformation``을 ``BitmapDrawable`` , ``GifDrawable`` , ``Bitmap`` 리소스에 사용 할 수 있습니다. 따라서 일반적으로 ``Bitmap`` ``Transformation`` 만 사용하시면 됩니다. 하지만 별도 리소스 타입을 추가할 경우 [``RequestOptions``][15] 의 서브 클래스를 만들고 항상 사용자 지정 타입을 위한 ``Transformation`` 을 ``Bitmap`` ``Transformations`` 과 함께 사용해야 합니다.
 
 [1]: {{ site.baseurl }}/javadocs/400/com/bumptech/glide/load/Transformation.html
 [2]: {{ site.baseurl }}/javadocs/400/com/bumptech/glide/load/resource/bitmap/FitCenter.html
