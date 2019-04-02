@@ -1,29 +1,28 @@
 ---
 layout: page
-title: "配置"
+title: "환경설정"
 category: doc
 date: 2018/7/9 16:51
 order: 9
 disqus: 1
 ---
 
-原文链接：[点击查看](http://bumptech.github.io/glide/doc/configuration.html){:target="_blank"}
+원문보기：[링크](http://bumptech.github.io/glide/doc/configuration.html)
 
 * TOC
 {:toc}
 
-### 设置
-为了让 Glide 正常工作，库和应用程序需要做一些固定的步骤。不过，假如你的库不希望注册额外的组件，则这些初始化不是必须的。
+### 셋업
+Glide 의 설정이 제대로 동작하려면 라이브러리와 어플리케이션에서 일련의 동작을 수행해야 합니다. 다만, 추가 컴포넌트를 등록하지 않으려는 라이브러리는 이 작업을 수행할 필요가 없습니다.
 
-#### 应用程序
-应用程序(Applications)需要：
-1. 恰当地添加一个 [``AppGlideModule``][1] 实现。
-2. (可选)添加一个或多个 [``LibraryGlideModule``][2] 实现。
-3. 给上述两种实现添加 [``@GlideModule``][5] 注解。
-4. 添加对 Glide 的注解解析器的依赖。
-5. 在 proguard 中，添加对 [``AppGlideModules``][1] 的 keep 。
+#### 어플리케이션
+1. [``AppGlideModule``][1] 는 앱내 1개만 구현.
+2. 필요하다면 1개 혹은 다수의 [``LibraryGlideModule``][2] 를 구현.
+3. [``@GlideModule``][5] 를 구현한 모든 [``AppGlideModule``][1] 과 [``LibraryGlideModule``][2] 에 추가
+4. Glide 어노테이션 프로세서 디펜던시를 추가
+5. 프로가드 keep 리스트에 [``AppGlideModules``][1] 추가
 
-在 Glide 的 [Flickr 示例应用][8] 中，有一个 [``AppGlideModule``][1] 的示例实现：
+Glide 의 [Flickr 샘플 앱][8] 의 [``AppGlideModule``][1] 를 살펴보면 다음과 같습니다.：
 ```java
 @GlideModule
 public class FlickrGlideModule extends AppGlideModule {
@@ -34,19 +33,19 @@ public class FlickrGlideModule extends AppGlideModule {
 }
 ```
 
-请注意添加对 Glide 的注解和注解解析器的依赖：
+어노테이션 프로세서를 사용하기 위해서는 Glide annotion 과 annotationProcessor 디펜던시를 추가해 주어야 합니다. ：
 ```groovy
-compile 'com.github.bumptech.glide:annotations:4.7.1'
-annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
+compile 'com.github.bumptech.glide:annotations:4.8.0'
+annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
 ```
 
-最后，你应该在你的 ``proguard.cfg`` 中 keep 住你的 AppGlideModule 实现：
+마지막으로, ``proguard.cfg`` 의 keep 리스트에 AppGlideModule 추가하셔야 합니다.：
 ```
--keep public class  extends com.bumptech.glide.module.AppGlideModule
+-keep public class * extends com.bumptech.glide.module.AppGlideModule
 -keep class com.bumptech.glide.GeneratedAppGlideModuleImpl
 ```
 
-#### 程序库 (Libraries)
+#### 라이브러리
 程序库若不需要注册定制组件，则不需要做任何配置步骤，可以完全跳过这个章节。
 
 程序库如果需要注册定制组件，例如 `ModelLoader`，可按以下步骤执行：
@@ -75,7 +74,7 @@ compile 'com.github.bumptech.glide:annotations:4.7.1'
 
 ##### 避免在程序库中使用 AppGlideModule
 程序库一定 **不要** 包含 ``AppGlideModule`` 实现。这么做将会阻止依赖该库的任何应用程序管理它们的依赖，或配置诸如 Glide 缓存大小和位置之类的选项。
- 
+
 此外，如果两个程序库都包含 ``AppGlideModule``，应用程序将无法在同时依赖两个库的情况下通过编译，而不得不在二者之中做出取舍。
 
 这确实意味着程序库将无法使用 Glide 的 generated API，但是使用 ``RequestOptions`` 加载仍然有效（可以在 [选项][42] 页找到例子）。
@@ -128,7 +127,7 @@ public class YourAppGlideModule extends AppGlideModule {
 
 #### Bitmap 池
 Glide 使用 [``LruBitmapPool``][39] 作为默认的 [``BitmapPool``][40] 。[``LruBitmapPool``][39] 是一个内存中的固定大小的 ``BitmapPool``，使用 LRU 算法清理。默认大小基于设备的分辨率和密度，同时也考虑内存类和 [``isLowRamDevice``][41] 的返回值。具体的计算通过 Glide 的 [``MemorySizeCalculator``][11] 来完成，与 Glide 的 [``MemoryCache``][9] 的大小检测方法相似。
- 
+
  应用可以在它们的 [``AppGlideModule``][1] 中定制 [``BitmapPool``] 的尺寸，使用 [``applyOptions(Context, GlideBuilder)``][12] 方法并配置 [``MemorySizeCalculator``][11]:
 
 ```java
@@ -317,7 +316,7 @@ public class YourAppGlideModule extends AppGlideModule {
 
 ``编码器(Encoder)``可以在步骤2之前往Glide的磁盘缓存中写入数据。
  ``资源编码器(ResourceEncoder)``可以在步骤3之前网Glide的磁盘缓存写入资源。
-  
+
 当一个请求开始后，Glide将尝试所有从数据模型到请求的资源类型的可用路径。如果任何一个加载路径成功，这个请求就将成功。只有所有可用加载路径都失败时，这个请求才会失败。
 
 ### 排序组件
@@ -377,13 +376,13 @@ Glide v4 依赖于两种类，[``AppGlideModule``][1] 与 [``LibraryGlideModule`
 
 #### AppGlideModule
 所有应用都必须添加一个 [``AppGlideModule``][1] 实现，即使应用并没有改变任何附加设置项，也没有实现 [``AppGlideModule``][1] 中的任何方法。 [``AppGlideModule``][1] 实现是一个信号，它会让 Glide 的注解解析器生成一个单一的所有已发现的 [``LibraryGlideModules``][2] 的联合类。
- 
+
 对于一个特定的应用，只能存在一个 [``AppGlideModule``][1] 实现（超过一个会在编译时报错）。因此，程序库不能提供 [``AppGlideModule``][1] 实现。
 
 #### @GlideModule
 为了让 Glide 正确地发现 [``AppGlideModule``][1] 和 [``LibraryGlideModule``][2] 的实现类，它们的所有实现都必须使用 [``@GlideModule``][5] 注解来标记。这个注解将允许 Glide 的 [注解解析器][6] 在编译时去发现所有的实现类。
 
-#### 注解处理器 
+#### 注解处理器
 另外，为了发现 [``AppGlideModule``][1] 和 [``LibraryGlideModules``][2]，所有的库和应用还必须包含一个Glide的注解解析器的依赖。
 
 ### 冲突
@@ -465,4 +464,3 @@ public final class MyAppGlideModule extends AppGlideModule {
 [40]: {{ site.baseurl }}/javadocs/431/com/bumptech/glide/load/engine/bitmap_recycle/BitmapPool.html
 [41]: https://developer.android.com/reference/android/app/ActivityManager.html#isLowRamDevice()
 [42]: {{ site.baseurl }}/doc/options.html
-
