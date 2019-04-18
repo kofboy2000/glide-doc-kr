@@ -40,8 +40,8 @@ And then change your dependencies to the snapshot version:
 
 ```gradle
 dependencies {
-  compile 'com.github.bumptech.glide:glide:4.7.1-SNAPSHOT'
-  compile 'com.github.bumptech.glide:okhttp-integration:4.7.1-SNAPSHOT'
+  compile 'com.github.bumptech.glide:glide:4.10.0-SNAPSHOT'
+  compile 'com.github.bumptech.glide:okhttp-integration:4.10.0-SNAPSHOT'
 }
 ```
 
@@ -73,12 +73,12 @@ Then change your dependencies to the snapshot version:
 <dependency>
   <groupId>com.github.bumptech.glide</groupId>
   <artifactId>glide</artifactId>
-  <version>4.7.1-SNAPSHOT</version>
+  <version>4.10.0-SNAPSHOT</version>
 </dependency>
 <dependency>
   <groupId>com.github.bumptech.glide</groupId>
   <artifactId>okhttp-integration</artifactId>
-  <version>4.7.1-SNAPSHOT</version>
+  <version>4.10.0-SNAPSHOT</version>
 </dependency>
 ```
 
@@ -118,12 +118,12 @@ The version, ``4.3.0-20171024.022226-26``, comes from the Sonatype repo. You can
 Although picking a specific snapshot version is a bit more work, it's typically a safer option if you're going to depend on the snapshot version of Glide in a prod version of your application or library.
 
 ### Building snapshots locally
-Maven allows you to install artifacts in specific Maven repositories and depend on those artifcats in other projects. Often this is a simple way to test changes in Glide in third party projects. There are two places that you 
+Maven allows you to install artifacts in specific Maven repositories and depend on those artifcats in other projects. Often this is a simple way to test changes in Glide in third party projects. There are two places that you
 
 #### Installing in the default local Maven repo
 If you simply want to test that some changes you've made in Glide work with your project (or build your project against a specific version or commit of Glide), you can install Glide in the default local maven repository.
 
-To do so, add the following to the ``repositories`` section of your ``build.gradle`` file: 
+To do so, add the following to the ``repositories`` section of your ``build.gradle`` file:
 
 ```groovy
 repositories {
