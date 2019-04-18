@@ -26,6 +26,15 @@ Transformations are applied using the [RequestOptions][9] class:
 #### Default Transformations
 
 ```java
+Glide.with(fragment)
+  .load(url)
+  .fitCenter()
+  .into(imageView);
+```
+
+Or with `RequestOptions`:
+
+```java
 RequestOptions options = new RequestOptions();
 options.centerCrop();
 
@@ -35,26 +44,6 @@ Glide.with(fragment)
     .into(imageView);
 ```
 
-Most built in transformations also have static imports for a more fluent API. For example, you can apply a [FitCenter][2] transformation using a static method:
-
-```java
-import static com.bumptech.glide.request.RequestOptions.fitCenterTransform;
-
-Glide.with(fragment)
-    .load(url)
-    .apply(fitCenterTransform())
-    .into(imageView);
-```
-
-If you're using the [generated API][16] the transformation methods are inlined, so it's even easier:
-
-```java
-GlideApp.with(fragment)
-  .load(url)
-  .fitCenter()
-  .into(imageView);
-```
-
 For more information on using RequestOptions, see the [Options][3] wiki page.
 
 #### Multiple Transformations.
@@ -62,21 +51,19 @@ By default, each subsequent call to [``transform()``][17] or any specific transf
 
 To instead apply multiple transformations to a single load, use the [``MultiTransformation``][18] class or the shortcut [``.transforms()``][19] method.
 
-With the [generated API][16]:
-
 ```java
-GlideApp.with(fragment)
+Glide.with(fragment)
   .load(url)
   .transform(new MultiTransformation(new FitCenter(), new YourCustomTransformation())
   .into(imageView);
 ```
 
-Or with the shortcut method and the [generated API][16]:
+Or with the shortcut method:
 
 ```java
-GlideApp.with(fragment)
+Glide.with(fragment)
   .load(url)
-  .transforms(new FitCenter(), new YourCustomTransformation())
+  .transform(new FitCenter(), new YourCustomTransformation())
   .into(imageView);
 ```
 
@@ -179,9 +166,9 @@ When you start a load into an [ImageView][7] in Glide, Glide may automatically a
 You can always override the default transformation by applying a [RequestOptions][9] with a ``Transformation`` set. In addition, you can ensure no ``Transformation`` is automatically applied using [``dontTransform()``][10].
 
 #### Custom resources
-Because Glide 4.0 allows you to specify a super type of the resource you're going to decode, you may not know exactly what type of transformation to apply. For example, when you use [``asDrawable()``][11] (or just ``with()`` since ``asDrawable()`` is the default) to ask for a Drawable resource, you may get either the [``BitmapDrawable``][12] subclass, or the [``GifDrawable``][13] subclass. 
+Because Glide 4.0 allows you to specify a super type of the resource you're going to decode, you may not know exactly what type of transformation to apply. For example, when you use [``asDrawable()``][11] (or just ``with()`` since ``asDrawable()`` is the default) to ask for a Drawable resource, you may get either the [``BitmapDrawable``][12] subclass, or the [``GifDrawable``][13] subclass.
 
-To ensure any ``Transformation`` you add to your ``RequestOptions`` is applied, Glide adds your ``Transformation`` to a map keyed on the resource class you provide to [``transform()``][14]. When a resource is successfully decoded , Glide uses the map to retrieve a corresponding ``Transformation``. 
+To ensure any ``Transformation`` you add to your ``RequestOptions`` is applied, Glide adds your ``Transformation`` to a map keyed on the resource class you provide to [``transform()``][14]. When a resource is successfully decoded , Glide uses the map to retrieve a corresponding ``Transformation``.
 
 Glide can apply ``Bitmap`` ``Transformations`` to ``BitmapDrawable``, ``GifDrawable``, and ``Bitmap`` resources, so typically you only need to write and apply ``Bitmap`` ``Transformations``. However, if you add additional resource types you may need to consider sub-classing [``RequestOptions``][15] and always applying a ``Transformation`` for your custom resource type in addition to the built in ``Bitmap`` ``Transformations``.
 

@@ -12,7 +12,7 @@ disqus: 1
 
 ### About
 
-The RecyclerView integration library makes the [``RecyclerViewPreloader``][2] available in your application. [``RecyclerViewPreloader``][2] can automatically load images just ahead of where a user is scrolling in a RecyclerView. 
+The RecyclerView integration library makes the [``RecyclerViewPreloader``][2] available in your application. [``RecyclerViewPreloader``][2] can automatically load images just ahead of where a user is scrolling in a RecyclerView.
 
 Combined with the right image size and an effective disk cache strategy, this library can dramatically decrease the number of loading tiles/indicators users see when scrolling through lists of images by ensuring that the images the user is about to reach are already in memory.
 
@@ -21,7 +21,7 @@ Combined with the right image size and an effective disk cache strategy, this li
 To use the RecyclerView integration library, add a dependency on it in your ``build.gradle`` file:
 
 ```groovy
-compile ("com.github.bumptech.glide:recyclerview-integration:4.7.1") {
+compile ("com.github.bumptech.glide:recyclerview-integration:4.9.0") {
   // Excludes the support library because it's already included by Glide.
   transitive = false
 }
@@ -62,7 +62,7 @@ private final imageHeightPixels = 768;
 
 ...
 
-PreloadSizeProvider sizeProvider = 
+PreloadSizeProvider sizeProvider =
     new FixedPreloadSizeProvider(imageWidthPixels, imageHeightPixels);
 ```
 
@@ -83,7 +83,7 @@ public void onBindViewHolder(ViewHolder viewHolder, int position) {
   ImageView imageView = ((MyViewHolder) viewHolder).imageView;
   String currentUrl = myUrls.get(position);
 
-  GlideApp.with(fragment)
+  Glide.with(fragment)
     .load(currentUrl)
     .override(imageWidthPixels, imageHeightPixels)
     .into(imageView);
@@ -111,9 +111,9 @@ private class MyPreloadModelProvider implements PreloadModelProvider {
   @Override
   @Nullable
   RequestBuilder getPreloadRequestBuilder(String url) {
-    return 
-      GlideApp.with(fragment)
-        .load(url) 
+    return
+      Glide.with(fragment)
+        .load(url)
         .override(imageWidthPixels, imageHeightPixels);
   }
 }
@@ -121,7 +121,7 @@ private class MyPreloadModelProvider implements PreloadModelProvider {
 
 It's critical that the ``RequestBuilder`` returned from ``getPreloadRequestBuilder`` use exactly the same set of options (placeholders, transformations etc) and exactly the same size as the request you start in ``onBindViewHolder``. If any of the options aren't exactly the same in the two methods for a given position, your preload request will be wasted because the image it loads will be cached with a cache key that doesn't match the cache key of the image you load in ``onBindViewHolder``. If you have trouble getting these cache keys to match, see the [debugging page][7].
 
-If you have nothing to preload for a given position, you can return an empty list from ``getPreloadItems``. If you later discover that you're unable to create a ``RequestBuilder`` for a given ``Model``, you may return ``null`` from ``getPreloadRequestBuilder``. 
+If you have nothing to preload for a given position, you can return an empty list from ``getPreloadItems``. If you later discover that you're unable to create a ``RequestBuilder`` for a given ``Model``, you may return ``null`` from ``getPreloadRequestBuilder``.
 
 #### RecyclerViewPreloader
 
@@ -131,13 +131,13 @@ Once you have your [``PreloadSizeProvider``][3] and your [``PreloadModelProvider
 private final imageWidthPixels = 1024;
 private final imageHeightPixels = 768;
 private List<String> myUrls = ...;
- 
+
 ...
 
-PreloadSizeProvider sizeProvider = 
+PreloadSizeProvider sizeProvider =
     new FixedPreloadSizeProvider(imageWidthPixels, imageHeightPixels);
 PreloadModelProvider modelProvider = new MyPreloadModelProvider();
-RecyclerViewPreloader<Photo> preloader = 
+RecyclerViewPreloader<Photo> preloader =
     new RecyclerViewPreloader<>(
         Glide.with(this), modelProvider, sizeProvider, 10 /*maxPreload*/);
 ```
@@ -146,9 +146,9 @@ Using 10 for maxPreload is just a placeholder, for a detailed discussion on how 
 
 ##### maxPreload
 
-The ``maxPreload`` is an integer that indicates how many items you want to preload. The optimal number will vary by your image size, quantity, the layout of your ``RecyclerView`` and in some cases even the devices your application is running on. 
+The ``maxPreload`` is an integer that indicates how many items you want to preload. The optimal number will vary by your image size, quantity, the layout of your ``RecyclerView`` and in some cases even the devices your application is running on.
 
-A good starting point is to pick a number large enough to include all of the images in two or three rows. Once you've picked your initial number, you can try running your application on a couple of devices and tweaking it as necessary to maximize the number of cache hits. 
+A good starting point is to pick a number large enough to include all of the images in two or three rows. Once you've picked your initial number, you can try running your application on a couple of devices and tweaking it as necessary to maximize the number of cache hits.
 
 An overly large number will mean you're preloading too far ahead to be useful. An overly small number will prevent you from loading enough images ahead of time.
 
@@ -180,24 +180,24 @@ public final class ImagesFragment extends Fragment {
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
-    
+
     View result = inflater.inflate(R.layout.images_fragment, container, false);
 
-    PreloadSizeProvider sizeProvider = 
+    PreloadSizeProvider sizeProvider =
         new FixedPreloadSizeProvider(imageWidthPixels, imageHeightPixels);
     PreloadModelProvider modelProvider = new MyPreloadModelProvider();
-    RecyclerViewPreloader<Photo> preloader = 
+    RecyclerViewPreloader<Photo> preloader =
         new RecyclerViewPreloader<>(
             Glide.with(this), modelProvider, sizeProvider, 10 /*maxPreload*/);
 
     RecyclerView myRecyclerView = (RecyclerView) result.findViewById(R.id.recycler_view);
     myRecyclerView.addOnScrollListener(preloader);
-   
+
     // Finish setting up your RecyclerView etc.
     myRecylerView.setLayoutManager(...);
     myRecyclerView.setAdapter(...);
 
-    ... 
+    ...
 
     return result;
   }
@@ -216,9 +216,9 @@ public final class ImagesFragment extends Fragment {
     @Override
     @Nullable
     public RequestBuilder getPreloadRequestBuilder(String url) {
-      return 
-        GlideApp.with(fragment)
-          .load(url) 
+      return
+        Glide.with(fragment)
+          .load(url)
           .override(imageWidthPixels, imageHeightPixels);
     }
   }

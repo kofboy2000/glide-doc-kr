@@ -11,7 +11,7 @@ disqus: 1
 
 ### About
 
-Glide v4 uses an [annotation processor][1] to generate an API that allows applications to access all options in [``RequestBuilder``][2], [``RequestOptions``][3] and any included integration libraries in a single fluent API.
+Glide v4 uses an [annotation processor][1] to generate an API that allows applications to extend Glide's API and include components provided by integration libraries.
 
 The generated API serves two purposes:
 1. Integration libraries can extend Glide's API with custom options.
@@ -23,9 +23,9 @@ Although both of these tasks can be accomplished by hand by writing custom subcl
 
 #### Availability
 
-The generated API is only available for applications for now. Limiting the generated API to applications allows us to have a single implementation of the API, instead of N implementations, one per library and the application. As a result, it's much simpler to manage imports and ensure that all call paths within a particular application have the correct options applied. This restriction may be lifted (experimentally or otherwise) in a future version. 
+The generated API is only available for applications for now. Limiting the generated API to applications allows us to have a single implementation of the API, instead of N implementations, one per library and the application. As a result, it's much simpler to manage imports and ensure that all call paths within a particular application have the correct options applied. This restriction may be lifted (experimentally or otherwise) in a future version.
 
-For now the API is only generated when a properly annotated ``AppGlideModule`` is found. There can only be one ``AppGlideModule`` per application. As a result it's not possible to generate the API for a library without precluding any application that uses the library from using the generated API. 
+For now the API is only generated when a properly annotated ``AppGlideModule`` is found. There can only be one ``AppGlideModule`` per application. As a result it's not possible to generate the API for a library without precluding any application that uses the library from using the generated API.
 
 #### Java
 
@@ -39,7 +39,7 @@ To use the generated API in your application, you need to perform two steps:
    }
 
    dependencies {
-     annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
+     annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
    }
    ```
 
@@ -72,7 +72,7 @@ If you're using Kotlin you can:
 
    ```groovy
    dependencies {
-     kapt 'com.github.bumptech.glide:compiler:4.7.1'
+     kapt 'com.github.bumptech.glide:compiler:4.9.0'
    }
    ```
   Note that you must also include the ``kotlin-kapt`` plugin in your ``build.gradle`` file:
@@ -85,7 +85,7 @@ If you're using Kotlin you can:
    ```groovy
    dependencies {
      kapt "android.arch.lifecycle:compiler:1.0.0"
-     kapt 'com.github.bumptech.glide:compiler:4.7.1'
+     kapt 'com.github.bumptech.glide:compiler:4.9.0'
    }
    ```
 
@@ -100,9 +100,9 @@ For the most part Android Studio just works with annotation processors and the g
 2. Click Rebuild Project.
 
 ### Using the generated API
- 
+
 The API is generated in the same package as the [``AppGlideModule``][4] implementation provided by the application and is named ``GlideApp`` by default. Applications can use the API by starting all loads with ``GlideApp.with()`` instead of ``Glide.with()``:
- 
+
 ```java
 GlideApp.with(fragment)
    .load(myUrl)
@@ -110,9 +110,9 @@ GlideApp.with(fragment)
    .fitCenter()
    .into(imageView);
 ```
- 
+
 Unlike ``Glide.with()`` options like ``fitCenter()`` and ``placeholder()`` are available directly on the builder and don't need to be passed in as a separate [``RequestOptions``][3] object.
-    
+
 ### GlideExtension
 
 Glide's generated API can be extended by both Applications and Libraries. Extensions use annotated static methods to add new options, modifying existing options, or add additional types.
@@ -145,9 +145,10 @@ public class MyAppExtension {
 
   private MyAppExtension() { } // utility class
 
+  @NonNull
   @GlideOption
-  public static void miniThumb(RequestOptions options) {
-    options
+  public static BaseRequestOptions<?> miniThumb(BaseRequestOptions<?> options) {
+    return options
       .fitCenter()
       .override(MINI_THUMB_SIZE);
   }
@@ -157,9 +158,9 @@ This will generate a method in a [``RequestOptions``][3] subclass that looks lik
 
 ```java
 public class GlideOptions extends RequestOptions {
-  
+
   public GlideOptions miniThumb() {
-    MyAppExtension.miniThumb(this);
+    return (GlideOptions) MyAppExtension.miniThumb(this);
   }
 
   ...
@@ -170,8 +171,8 @@ You can include as many additional arguments in your methods as you want, as lon
 
 ```java
 @GlideOption
-public static void miniThumb(RequestOptions options, int size) {
-  options
+public static BaseRequestOptions<?> miniThumb(BaseRequestOptions<?> options, int size) {
+  return options
     .fitCenter()
     .override(size);
 }
@@ -181,7 +182,7 @@ The additional arguments will be added as arguments to the generated method:
 
 ```java
 public GlideOptions miniThumb(int size) {
-  MyAppExtension.miniThumb(this);
+  return (GlideOptions) MyAppExtension.miniThumb(this);
 }
 ```
 
@@ -194,7 +195,7 @@ GlideApp.with(fragment)
    .into(imageView);
 ```
 
-Methods with the ``GlideOption`` annotation are expected to be static and to return void. Note that the generated methods will not be available on the standard ``Glide`` and ``RequestOptions`` classes.
+Methods with the ``GlideOption`` annotation are expected to be static and to return `BaseRequestOptions<?>`. Note that the generated methods will not be available on the standard ``Glide`` and ``RequestOptions`` classes, only the generated equivalents.
 
 #### GlideType
 
@@ -207,9 +208,10 @@ For example, to add support for GIFs, you might add a ``GlideType`` method:
 public class MyAppExtension {
   private static final RequestOptions DECODE_TYPE_GIF = decodeTypeOf(GifDrawable.class).lock();
 
+  @NonNull
   @GlideType(GifDrawable.class)
-  public static void asGif(RequestBuilder<GifDrawable> requestBuilder) {
-    requestBuilder
+  public static RequestBuilder<GifDrwable> asGif(RequestBuilder<GifDrawable> requestBuilder) {
+    return requestBuilder
       .transition(new DrawableTransitionOptions())
       .apply(DECODE_TYPE_GIF);
   }
@@ -221,12 +223,10 @@ Doing so will generate a [``RequestManager``][11] with a method that looks like 
 ```java
 public class GlideRequests extends RequesetManager {
 
-  public RequestBuilder<GifDrawable> asGif() {
-    RequestBuilder<GifDrawable> builder = as(GifDrawable.class);
-    MyAppExtension.asGif(builder);
-    return builder;
+  public GlideRequest<GifDrawable> asGif() {
+    return (GlideRequest<GifDrawable> MyAppExtension.asGif(this.as(GifDrawable.class));
   }
-  
+
   ...
 }
 ```
@@ -240,7 +240,7 @@ GlideApp.with(fragment)
   .into(imageView);
 ```
 
-Methods annotated with ``GlideType`` must take a [``RequestBuilder<T>``][2] as their first argument where the type ``<T>`` matches the class provided to the [``GlideType``][8] annotation. Methods are expected to be static and return void. Methods must be defined in a class annotated with [``GlideExtension``][6]. 
+Methods annotated with ``GlideType`` must take a [``RequestBuilder<T>``][2] as their first argument where the type ``<T>`` matches the class provided to the [``GlideType``][8] annotation. Methods are expected to be static and return `RequestBuilder<T>`. Methods must be defined in a class annotated with [``GlideExtension``][6].
 
 
 [1]: https://docs.oracle.com/javase/8/docs/api/javax/annotation/processing/Processor.html

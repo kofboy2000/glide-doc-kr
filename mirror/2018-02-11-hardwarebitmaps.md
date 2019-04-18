@@ -10,7 +10,7 @@ disqus: 1
 {:toc}
 
 ### What are hardware Bitmaps?
-[`Bitmap.Config.HARDWARE`][3] is a new `Bitmap` format that was added in Android O. Hardware `Bitmaps` store pixel data only in graphics memory and are optimal for cases where the `Bitmap` is only drawn to the screen. 
+[`Bitmap.Config.HARDWARE`][3] is a new `Bitmap` format that was added in Android O. Hardware `Bitmaps` store pixel data only in graphics memory and are optimal for cases where the `Bitmap` is only drawn to the screen.
 
 ### Why should we use hardware Bitmaps?
 Only one copy of pixel data is stored for hardware `Bitmaps`. Normally there’s one copy of pixel data in application memory (the pixel byte array) and one copy in graphics memory (after the pixels are uploaded to the GPU). Hardware `Bitmaps` retain only the copy uploaded to the GPU. As a result:
@@ -24,24 +24,12 @@ Temporarily, set the default [`DecodeFormat`][1] to [`DecodeFormat.PREFER_ARGB_8
 In the long run Glide will load hardware `Bitmaps` by default and no changes will be needed to enable the format, only to disable it.
 
 ### How do we disable hardware Bitmaps?
-If you need to disable hardware `Bitmaps`, you should try to do so only for requests where you need to do one of the slow or broken things below. You can disable hardware `Bitmaps` for a particular request using [`disallowHardwareConfig()`][5].
-
-If you’re using the generated API:
+If you need to disable hardware `Bitmaps`, you should try to do so only for requests where you need to do one of the slow or broken things below. You can disable hardware `Bitmaps` for a particular request using [`disallowHardwareConfig()`][5]:
 
 ```java
-GlideApp.with(fragment)
-  .load(url)
-  .disallowHardwareConfig()
-  .into(imageView);
-```
-
-Or just via `RequestOptions`:
-
-```java
-RequestOptions options = new RequestOptions().disallowHardwareConfig();
 Glide.with(fragment)
   .load(url)
-  .apply(options)
+  .disallowHardwareConfig()
   .into(imageView);
 ```
 
@@ -66,8 +54,8 @@ imageView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 ```
 
 * Opening too many file descriptors.
-  
-    Each hardware `Bitmap` consumes a file descriptor. There’s a per process FD limit (O & earlier typically 1024, in some builds of O-MR1 & higher it’s 32k). Glide attempts to limit the number of hardware `Bitmaps` allocated to stay under the limit, but if you’re already allocating large numbers of FDs, this may be an issue. 
+
+    Each hardware `Bitmap` consumes a file descriptor. There’s a per process FD limit (O & earlier typically 1024, in some builds of O-MR1 & higher it’s 32k). Glide attempts to limit the number of hardware `Bitmaps` allocated to stay under the limit, but if you’re already allocating large numbers of FDs, this may be an issue.
 
 * Preconditions that expect `ARGB_8888 Bitmaps`
 * Screenshots triggered by code that try to draw the view hierarchy with `Canvas`.
