@@ -20,25 +20,25 @@ translators: [kofboy2000]
 
 **Support Library Version** - Glide 는 Support library 버전 **27** 을 사용 합니다.
 
-다른 버전의 Support library 를 사용하려면 build.gradle 파일에서 `"com.android.support"`을 제외해야 합니다. v26을 사용하시려면 아래를 참고하시기 바랍니다.
+다른 버전의 Support library 를 사용하려면 build.gradle 파일에서 `"com.android.support"`을 제외해야 합니다. 예를 들어 26 버전을 사용하시려면 아래를 참고하시기 바랍니다.
 
 ```groovy
 dependencies {
-  implementation ("com.github.bumptech.glide:glide:4.8.0") {
+  implementation ("com.github.bumptech.glide:glide:4.9.0") {
     exclude group: "com.android.support"
   }
   implementation "com.android.support:support-fragment:26.1.0"
 }
 ```
 
-Glide 가 다른 버전의 Support library 를 사용하면 다음과 같은 Runtime Exception 이 발생할 수 있습니다.:
+Glide 가 참조하는 버전의 Support libarary 가 아닌 다른 버전의 Support library 를 사용하면 다음과 같은 Runtime Exception 이 발생할 수 있습니다.:
 
 ```
 java.lang.NoSuchMethodError: No static method getFont(Landroid/content/Context;ILandroid/util/TypedValue;ILandroid/widget/TextView;)Landroid/graphics/Typeface; in class Landroid/support/v4/content/res/ResourcesCompat; or its super classes (declaration of 'android.support.v4.content.res.ResourcesCompat'
 at android.support.v7.widget.TintTypedArray.getFont(TintTypedArray.java:119)
 ```
 
-또한 Glide 의 API에 문제가 발생하여 `GlideApp` 클래스가 생성되지 않을 수도 있습니다.
+또한 Glide 의 API generator 에 문제가 발생하여 `GlideApp` 클래스가 생성되지 않을 수도 있습니다.
 자세한 내용은 이슈 [#2730][8] 를 참조하시기 바랍니다.
 
 ### 다운로드
@@ -51,7 +51,7 @@ GitHub 에서 [최신 jar 파일][1]을 다운로드 받으실 수 있습니다.
 
 #### Gradle
 
-Gradle 을 사용하는 경우 Maven Central 또는 JCenter 를 사용하여 Gradle 의 dependency 에 추가할 수 있습니다. 이 경우에도 Support libarary 를 추가하셔야 합니다.
+Gradle 을 사용하는 경우 Maven Central 또는 JCenter 를 사용하여 Gradle dependency 를 추가할 수 있습니다. 이 경우에도 Support libarary 를 추가하셔야 합니다.
 
 ```groovy
 repositories {
@@ -60,23 +60,24 @@ repositories {
 }
 
 dependencies {
-    compile 'com.github.bumptech.glide:glide:4.8.0'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
+    compile 'com.github.bumptech.glide:glide:4.9.0'
+    // Skip this if you don't want to use integration libraries or configure Glide.
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
 }
 ```
 
-주의：되도록이면 `@aar` 자체를 Gradle 에 추가하는 것은 피하사기 바랍니다. 만약 꼭 필요하다면 `transitive=true` 를 추가하시고 APK 필요한 모든 클래스들을 추가하시기 바랍니다.
+주의：`@aar` 자체를 Gradle 에 추가하는 것은 피하시길 바랍니다. 만약 꼭 필요하다면 `transitive=true` 를 추가하시고 APK 필요한 모든 클래스들을 추가하시기 바랍니다.
 
 ```groovy
 dependencies {
-    implementation ("com.github.bumptech.glide:glide:4.8.0@aar") {
+    implementation ("com.github.bumptech.glide:glide:4.9.0@aar") {
         transitive = true
     }
 }
 ```
 `@aar` 은 기본적으로 Gradle 의 dependency 를 제거하는 ["Artifact Only"][9] 표기법 입니다.
 
-dependency 에 추가하지 않고 `@aar` 자체를 추가한 후 `transitive=true` 를 선언하지 않는다면 다음과 같은 Runtime exception 이 발생 할 수 있습니다. ：
+dependency 에 추가하지 않고 `@aar` 자체를 추가한 후 `transitive=true` 를 선언하지 않는다면 다음과 같은 Runtime exception 이 발생 할 수 있습니다.
 
 ```
 java.lang.NoClassDefFoundError: com.bumptech.glide.load.resource.gif.GifBitmapProvider
@@ -94,7 +95,7 @@ java.lang.NoClassDefFoundError: com.bumptech.glide.load.resource.gif.GifBitmapPr
 
 #### Maven
 
-Maven 을 사용하신다면 Glide 를 dependency 에 추가하여 사용 하실 수 있습니다. 거듭 강조하지만, support libarary 추가를 잊지 마시기 바랍니다.
+Maven 을 사용하신다면 Glide 를 dependency 에 추가하여 사용 하실 수 있습니다. 이곳에서도, support libarary 추가를 잊지 마시기 바랍니다.
 
 ```xml
 <dependency>
@@ -217,7 +218,7 @@ target API 레벨이 Android API 27 이하 버전일 경우 아래 라인도 추
 VideoDecoder는 API 27 API를 사용하므로, 이전 버전의 Android 단말에서는 새로운 API를 호출하지 않더라도 proguard 경고를 발생시킬 수 있습니다.
 
 DexGuard 를 사용할 경우 아래 라인도 추가해 줍니다.
-```
+```pro
 # for DexGuard only
 -keepresourcexmlelements manifest/application/meta-data@value=GlideModule
 ```
@@ -238,7 +239,7 @@ Kotlin 으로 구현된 클래스에서 Glide의 annotation 을 사용하는 경
 
 ```groovy
 dependencies {
-  kapt 'com.github.bumptech.glide:compiler:4.8.0'
+  kapt 'com.github.bumptech.glide:compiler:4.9.0'
 }
 ```
 
