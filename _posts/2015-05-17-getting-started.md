@@ -82,7 +82,7 @@ public void onBindViewHolder(ViewHolder holder, int position) {
 
 url 에 대한 null 체크도 필요하지 않습니다. Glide 가 View 를 클리어 시키거나, url 이 null 일 때 사용토록 사용자가 정의한 [placeholder Drawable][2] 나 [fallback Drawable][3] 을 설정해 주게 됩니다.
 
-Glide 의 유일한 요구사항은 어떠한 재사용 가능한 ``View`` 나 [``Target``][5] 의 기존에 있던 내용들을 다시 한번 새로 로드 하거나 [``clear()``][4] API 로 명시적으로 클리어 해주어야 한 다는 것 입니다.
+유일하게 해주어야 할 것은 재사용 가능한 ``View`` 나 [``Target``][5] 의 기존에 있던 내용들을 다시 한번 불러오거나 [``clear()``][4] API 로 명시적으로 클리어 해주어야 한 다는 것 입니다.
 
 ```java
 @Override
@@ -99,7 +99,7 @@ public void onBindViewHolder(ViewHolder holder, int position) {
 }
 ```
 
-``View`` 에 [``clear()``][4] 나 ``into(View)`` 를 호출함으로써 이전 로드를 취소하고 Glide 호출이 완료된 후 View 의 내용이 변경되지 않도록 보장할 수 있습니다.
+``View`` 에 [``clear()``][4] 나 ``into(View)`` 를 호출함으로써 이전 로드를 취소하고 Glide 호출이 완료된 후 View 의 내용이 변경되지 않도록 보장할 수 있습니다. 만약 [``clear()``][4] 을 하지 않고 새로운 로드를 시작할 경우, 이전 포지션의 뷰에서 시작된 로드는 ``Drawable`` 이 적용된 이후에 완료되며 ``View`` 가 예전 이미지로 변경 될 수 있습니다.
 
 여기서 보신 예제는 RecycleClerView에 대한 것이지만 ListView에도 동일하게 적용 됩니다.
 
@@ -118,7 +118,7 @@ Glide.with(context
   });
 ```
 
-사용자 지정 ``Target`` 를 사용할 때 몇 가지 알아야 할 것들이 있습니다. [Targets][9] 문서 페이지 에서 자세한 내용 확인해 보시기 바랍니다. 
+사용자 지정 ``Target`` 를 사용할 때 몇 가지 알아야 할 것들이 있습니다. [Targets][9] 문서 페이지 에서 자세한 내용 확인해 보시기 바랍니다.
 
 ### 백그라운드 쓰레드
 
