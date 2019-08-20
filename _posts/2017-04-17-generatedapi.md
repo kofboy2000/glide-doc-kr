@@ -148,9 +148,10 @@ public class MyAppExtension {
 
   private MyAppExtension() { } // utility class
 
+  @NonNull
   @GlideOption
-  public static void miniThumb(RequestOptions options) {
-    options
+  public static BaseRequestOptions<?> miniThumb(BaseRequestOptions<?> options) {
+      return options
       .fitCenter()
       .override(MINI_THUMB_SIZE);
   }
@@ -162,7 +163,7 @@ public class MyAppExtension {
 public class GlideOptions extends RequestOptions {
 
   public GlideOptions miniThumb() {
-    MyAppExtension.miniThumb(this);
+    return (GlideOptions) MyAppExtension.miniThumb(this);
   }
 
   ...
@@ -173,8 +174,8 @@ public class GlideOptions extends RequestOptions {
 
 ```java
 @GlideOption
-public static void miniThumb(RequestOptions options, int size) {
-  options
+public static BaseRequestOptions<?> miniThumb(BaseRequestOptions<?> options, int size) {
+  return options
     .fitCenter()
     .override(size);
 }
@@ -184,7 +185,7 @@ public static void miniThumb(RequestOptions options, int size) {
 
 ```java
 public GlideOptions miniThumb(int size) {
-  MyAppExtension.miniThumb(this);
+  return (GlideOptions) MyAppExtension.miniThumb(this);
 }
 ```
 
@@ -197,7 +198,7 @@ GlideApp.with(fragment)
    .into(imageView);
 ```
 
-``@GlideOption`` 이 붙은 메소드는 static 함수이며, void 를 리턴하여야 합니다. 또한, 이렇게 생성된 API 들은  ``Glide`` 나 ``RequestOptions`` 클래스에서는 사용할 수 없습니다.
+``@GlideOption`` 이 붙은 메소드는 static 함수이며, `BaseRequestOptions<?>` 를 리턴하여야 합니다. 또한, 이렇게 생성된 API 들은  ``Glide`` 나 ``RequestOptions`` 클래스에서는 사용할 수 없습니다.
 
 #### GlideType
 
@@ -210,9 +211,10 @@ GlideApp.with(fragment)
 public class MyAppExtension {
   private static final RequestOptions DECODE_TYPE_GIF = decodeTypeOf(GifDrawable.class).lock();
 
+  @NonNull
   @GlideType(GifDrawable.class)
-  public static void asGif(RequestBuilder<GifDrawable> requestBuilder) {
-    requestBuilder
+  public static RequestBuilder<GifDrwable> asGif(RequestBuilder<GifDrawable> requestBuilder) {
+      return requestBuilder
       .transition(new DrawableTransitionOptions())
       .apply(DECODE_TYPE_GIF);
   }
@@ -224,10 +226,8 @@ public class MyAppExtension {
 ```java
 public class GlideRequests extends RequesetManager {
 
-  public RequestBuilder<GifDrawable> asGif() {
-    RequestBuilder<GifDrawable> builder = as(GifDrawable.class);
-    MyAppExtension.asGif(builder);
-    return builder;
+  public GlideRequest<GifDrawable> asGif() {
+      return (GlideRequest<GifDrawable> MyAppExtension.asGif(this.as(GifDrawable.class));
   }
 
   ...
@@ -243,7 +243,7 @@ GlideApp.with(fragment)
   .into(imageView);
 ```
 
-``@GlideType``의 annotation 이 표기된 메소드는 [``RequestBuilder<T>``][2] 를 첫번째 파라미터로 가져야 하며 이떄, ``<T>``의 값은 [``@GlideType``][8] annotation 에서 정의한 클래스 여야 합니다. 메소드는 [``@GlideExtension``][6] 이 명시된 클래스 내에 있어야 하며, static 으로 선언되어야 하며, void 를 리턴 값으로 가져야 합니다.
+``@GlideType``의 annotation 이 표기된 메소드는 [``RequestBuilder<T>``][2] 를 첫번째 파라미터로 가져야 하며 이떄, ``<T>``의 값은 [``@GlideType``][8] annotation 에서 정의한 클래스 여야 합니다. 메소드는 [``@GlideExtension``][6] 이 명시된 클래스 내에 있어야 하며, static 으로 선언되어야 하며, `RequestBuilder<T>` 를 리턴 값으로 가져야 합니다.
 
 
 [1]: https://docs.oracle.com/javase/8/docs/api/javax/annotation/processing/Processor.html
