@@ -31,6 +31,15 @@ Glide 에는 다음과 같이 몇가지 기본 transformations 을 포함하고 
 #### 디폴트 Transformations
 
 ```java
+Glide.with(fragment)
+  .load(url)
+  .fitCenter()
+  .into(imageView);
+```
+
+혹은 `RequestOptions` 을 사용하는 경우,
+
+```java
 RequestOptions options = new RequestOptions();
 options.centerCrop();
 
@@ -40,7 +49,7 @@ Glide.with(fragment)
     .into(imageView);
 ```
 
-기본 제공 하는 transformations 은 static import 를 지원 합니다. 예를 들어  [FitCenter][2] 는 static 메소드를 사용해 추가 할 수 있습니다. ：
+RequestOption 사용에 대한 자세한 내용은 [Options][3] 페이지를 참조하시기 바랍니다.
 
 ```java
 import static com.bumptech.glide.request.RequestOptions.fitCenterTransform;

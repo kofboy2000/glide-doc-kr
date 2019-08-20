@@ -21,9 +21,9 @@ Glide 는 각기 다른 상황에서 사용되는 3종류의 다른 Placeholder 
 
 #### Placeholder
 
-Placeholder 는 요청이 진행 중일 때 나타나는 Drawable 입니다. 요청이 성공적으로  이뤄지면 Placeholder 는 요청된 리소스로 교체 되게 됩니다. 만약에 요청된 리소스가 메모리에서 부터 온다면, Placeholder 가 나타날 일은 없으나,  `error Drawable` 이 별도로 없는 상태에서 요청이 실패할 경우 Placeholder 는 계속 보여지게 될 것 입니다.비슷한 상황으로, url/model 이 ``null`` 일 때 `error Drawable` 이나 `fallback` 이 없을 경우 Placeholder 가 계속 보여질 것 입니다.
+Placeholder 는 요청이 진행 중일 때 나타나는 Drawable 입니다. 요청이 성공적으로  이뤄지면 Placeholder 는 요청된 리소스로 교체 되게 됩니다. 만약에 요청된 리소스가 메모리에서 로드 되면, Placeholder 가 나타날 일은 없습니다. 허나,  `error Drawable` 이 별도로 없는 상태에서 요청이 실패할 경우 Placeholder 는 계속 보여지게 될 것 입니다.비슷한 상황으로, url/model 이 ``null`` 일 때 `error Drawable` 이나 `fallback` 이 없을 경우 Placeholder 가 계속 보여질 것 입니다.
 
-[generated API][4] 에서는 아래와 같이 사용되거나,
+사용 예제는 아래와 같이 쓰이거나,
 
 ```java
 GlideApp.with(fragment)
@@ -32,7 +32,7 @@ GlideApp.with(fragment)
   .into(view);
 ```
 
-또는 다음과 같이 사용 될 수 있습니다.
+혹은 아래와 같이 사용 될 수 있습니다.
 
 ```java
 GlideApp.with(fragment)
@@ -44,8 +44,6 @@ GlideApp.with(fragment)
 #### Error
 
 `error Drawable` 은 요청이 최종적으로 실패할 경우 나타나게 됩니다. `error Drawable` 은 url/model 이 ``null`` 이거나 `fallback Drawable` 이 별도로 설정 되어 있지 않은 경우 나타기도 합니다.
-
- [generated API][4] 에서는 아래와 같이 사용되거나,
 
 ```java
 GlideApp.with(fragment)
@@ -65,8 +63,6 @@ GlideApp.with(fragment)
 
 #### Fallback
 `fallback Drawable` 은 요청한 url/model 이 ``null`` 일 경우 나타납니다. `fallback Drawable` 의 주요 목적은 사용자로 하여금 ``null`` 이 예상되는지 여부를 표시할 수 있도록 하는 것 입니다. 예를 들어, 프로필 사진이 ``null`` url 인 경우 이를 아직 프로필 사진이 설정되지 않는 경우로 보고 기본 이미지를 사용해야 될 수 있습니다. 그런데 ``null`` 이 meta-data 를 잘못 설정된 상태이거나 해당 url 을 검색할 수 없는 상황일 수도 있습니다. 기본적으로 Glide 는 ``null`` url/model 을 error 로 취급합니다. 따라서 ``null`` 에 대한 예측 상황이 따로 있는 경우 `fallback Drawable` 을 설정해 주어야 합니다.
-
- [generated API][4] 에서는 아래와 같이 사용되거나,
 
 ```java
 GlideApp.with(fragment)
@@ -98,4 +94,3 @@ GlideApp.with(fragment)
 [1]: {{ site.baseurl }}/javadocs/400/com/bumptech/glide/request/RequestOptions.html#placeholder-int-
 [2]: {{ site.baseurl }}/javadocs/400/com/bumptech/glide/request/RequestOptions.html#error-int-
 [3]: {{ site.baseurl }}/javadocs/400/com/bumptech/glide/request/RequestOptions.html#fallback-int-
-[4]: generatedapi.html
