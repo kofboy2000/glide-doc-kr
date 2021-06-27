@@ -79,7 +79,7 @@ Glide.with(fragment)
 No. Placeholders are loaded from Android resources on the main thread. We typically expect placeholders to be small and easily cacheable by the system resource cache.
 
 ##### Are Transformations applied to placeholders?
-No. Transformations are applied only to the requested resource, not to any placeholder.
+No. Transformations are applied only to the requested resource, not to any placeholder. 
 
 It's inefficient to include resources that have to be transformed at runtime in your application. You're almost always better off including a version of the resource that's exactly the size and shape that you need. If you're loading circular images for example, you may want to include circular placeholder resources with your application. Alternatively you could also consider a custom View to clip your placeholder in the same manner as your Transformation.
 

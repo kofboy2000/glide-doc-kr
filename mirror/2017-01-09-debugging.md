@@ -3,7 +3,7 @@ layout: page
 title: "Debugging"
 category: doc
 date: 2017-01-09 07:14:59
-order: 12
+order: 12 
 disqus: 1
 ---
 * TOC
@@ -35,21 +35,6 @@ For details on how Glide's caching works, see [the Caching page][13].
 The [``Engine``][9] log tag provides details on how a request will be fulfilled and includes the full in memory cache key used to store the corresponding resource. If you're trying to debug why images you have in memory in one place aren't being used in another place, the ``Engine`` tag lets you compare the cache keys directly to see the differences.
 
 For each started request, the ``Engine`` tag will log that the request will be completed from cache, active resources, an existing load, or a new load. Cache means that the resource wasn't in use, but was available in the in memory cache. Active resources means that the resource was actively being used by another ``Target``, typically in a ``View``. An existing load means that the resource wasn't available in memory, but another ``Target`` had previously requested the same resource and the load is already in progress. Finally a new load means that the resource was neither in memory nor already being loaded so our request triggered a new load.
-
-#### Missing images and local logs
-In some cases you may see that an image never loads and that no logs with either the ``Glide`` tag or the ``Engine`` tag are ever logged for your request. There are a few possible causes.
-
-##### Failing to start the request.
-Verify that you're calling [``into()``][2] or [``submit()``][3] for your request. If you don't call either method, you're never asking Glide to start your load.
-
-##### Missing Size
-If you verify that you are in fact calling [``into()``][2] or [``submit()``][3] and you're still not seeing logs, the most likely explanation is that Glide is unable to determine the size of the ``View`` or ``Target`` you're attempting to load your resource into.
-
-###### Custom Targets
-If you're using a custom ``Target``, make sure you've either implemented [``getSize``][4] and are calling the given callback with a non-zero width and height or are subclassing a ``Target`` like [``ViewTarget``][5] that implements the method for you.
-
-###### Views
-If you're just loading a resource into a ``View``, the most likely explanation is that your view is either not going through layout or is being given a 0 width or height. Views may not go through layout if their visibility is set to ``View.GONE`` or if they are never attached. Views may receive invalid or 0 widths and heights if they and/or their parents have certain combinations of ``wrap_content`` and ``match_parent`` for their widths and heights. You can experiment by giving your views fixed non-zero dimensions or passing in an specific size to Glide to use for the request with the [``override(int, int)`` API][6].
 
 #### RequestListener and custom logs
 If you'd like to programmatically keep track of errors and successful loads, track the overall cache hit ratio of images in your application, or have more control over local logs, you can use the [``RequestListener``][7] interface. ``RequestListener`` can be added to an individual load using [``RequestBuilder#listener()``][8]. Sample usage looks like this:
@@ -102,6 +87,21 @@ You can use a similar process involving iteration and ``instanceof`` to try to d
 
 To save object allocations, you can re-use the same ``RequestListener`` for multiple loads.
 
+### Missing images and local logs
+In some cases you may see that an image never loads and that no logs with either the ``Glide`` tag or the ``Engine`` tag are ever logged for your request. There are a few possible causes.
+
+#### Failing to start the request.
+Verify that you're calling [``into()``][2] or [``submit()``][3] for your request. If you don't call either method, you're never asking Glide to start your load.
+
+#### Missing Size
+If you verify that you are in fact calling [``into()``][2] or [``submit()``][3] and you're still not seeing logs, the most likely explanation is that Glide is unable to determine the size of the ``View`` or ``Target`` you're attempting to load your resource into.
+
+##### Custom Targets
+If you're using a custom ``Target``, make sure you've either implemented [``getSize``][4] and are calling the given callback with a non-zero width and height or are subclassing a ``Target`` like [``ViewTarget``][5] that implements the method for you.
+
+##### Views
+If you're just loading a resource into a ``View``, the most likely explanation is that your view is either not going through layout or is being given a 0 width or height. Views may not go through layout if their visibility is set to ``View.GONE`` or if they are never attached. Views may receive invalid or 0 widths and heights if they and/or their parents have certain combinations of ``wrap_content`` and ``match_parent`` for their widths and heights. You can experiment by giving your views fixed non-zero dimensions or passing in an specific size to Glide to use for the request with the [``override(int, int)`` API][6].
+
 ### Out of memory errors
 Almost all OOM errors are due to issues with the hosting application and not with Glide.
 
@@ -129,7 +129,7 @@ To fix memory leaks, remove references to the destroyed ``Fragment`` or ``Activi
 ### Other common issues
 
 #### "You can't start or clear loads in RequestListener or Target callbacks"
-If you attempt to start a new load in ``onResourceReady`` or ``onLoadFailed`` in a ``Target`` or ``RequestListener``, Glide will throw an exception. We throw this exception because it's challenging for us to handle the load being recycled while it's in the middle of notifying.
+If you attempt to start a new load in ``onResourceReady`` or ``onLoadFailed`` in a ``Target`` or ``RequestListener``, Glide will throw an exception. We throw this exception because it's challenging for us to handle the load being recycled while it's in the middle of notifying. 
 
 Fortunately this is easy to fix. Starting in Glide 4.3.0, you can simply use the [``.error()``][14] method. [``error()``][14] takes an arbitrary [``RequestBuilder``][15] that will start a new request only if the primary request fails:
 
@@ -153,7 +153,7 @@ Glide.with(fragment)
       ...
 
       @Override
-      public boolean onLoadFailed(@Nullable GlideException e, Object model,
+      public boolean onLoadFailed(@Nullable GlideException e, Object model, 
           Target<Drawable> target, boolean isFirstResource) {
         handler.post(new Runnable() {
             @Override
@@ -170,7 +170,7 @@ Glide.with(fragment)
 
 #### "cannot resolve symbol 'GlideApp'"
 
-When using the generated API, you may run into errors that prevent the annotation processor from generating Glide's API. Sometimes these errors are related to [your setup][17], but other times they can be completely unrelated.
+When using the generated API, you may run into errors that prevent the annotation processor from generating Glide's API. Sometimes these errors are related to [your setup][17], but other times they can be completely unrelated. 
 
 Often unrelated failures are hidden by the number of non root cause error messages. There may be so many other errors that you'll be unable to find the root cause in your build logs. If this happens and you're using Gradle, try adding the following to increase the number of error messages Gradle will print:
 
@@ -185,11 +185,11 @@ allprojects {
 }
 ```
 
-See also:
+See also: 
 
   *    [https://github.com/bumptech/glide/issues/1945](https://github.com/bumptech/glide/issues/1945)
   *    [https://stackoverflow.com/questions/3115537/java-compilation-errors-limited-to-100/35707023#35707023](https://stackoverflow.com/questions/3115537/java-compilation-errors-limited-to-100/35707023#35707023)
-
+          
 [1]: {{ site.baseurl }}/javadocs/400/com/bumptech/glide/GlideBuilder.html#setLogLevel-int-
 [2]: {{ site.baseurl }}/javadocs/400/com/bumptech/glide/RequestBuilder.html#into-android.widget.ImageView-
 [3]: {{ site.baseurl }}/javadocs/400/com/bumptech/glide/RequestBuilder.html#submit-int-int-

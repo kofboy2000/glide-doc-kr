@@ -10,7 +10,7 @@ disqus: 1
 {:toc}
 
 ### What are hardware Bitmaps?
-[`Bitmap.Config.HARDWARE`][3] is a new `Bitmap` format that was added in Android O. Hardware `Bitmaps` store pixel data only in graphics memory and are optimal for cases where the `Bitmap` is only drawn to the screen.
+[`Bitmap.Config.HARDWARE`][3] is a new `Bitmap` format that was added in Android O. Hardware `Bitmaps` store pixel data only in graphics memory and are optimal for cases where the `Bitmap` is only drawn to the screen. 
 
 ### Why should we use hardware Bitmaps?
 Only one copy of pixel data is stored for hardware `Bitmaps`. Normally there’s one copy of pixel data in application memory (the pixel byte array) and one copy in graphics memory (after the pixels are uploaded to the GPU). Hardware `Bitmaps` retain only the copy uploaded to the GPU. As a result:
@@ -54,8 +54,8 @@ imageView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 ```
 
 * Opening too many file descriptors.
-
-    Each hardware `Bitmap` consumes a file descriptor. There’s a per process FD limit (O & earlier typically 1024, in some builds of O-MR1 & higher it’s 32k). Glide attempts to limit the number of hardware `Bitmaps` allocated to stay under the limit, but if you’re already allocating large numbers of FDs, this may be an issue.
+  
+    Each hardware `Bitmap` consumes a file descriptor. There’s a per process FD limit (O & earlier typically 1024, in some builds of O-MR1 & higher it’s 32k). Glide attempts to limit the number of hardware `Bitmaps` allocated to stay under the limit, but if you’re already allocating large numbers of FDs, this may be an issue. 
 
 * Preconditions that expect `ARGB_8888 Bitmaps`
 * Screenshots triggered by code that try to draw the view hierarchy with `Canvas`.

@@ -20,7 +20,7 @@ If you need or would prefer to use a different version of the support library yo
 
 ```groovy
 dependencies {
-  implementation ("com.github.bumptech.glide:glide:4.9.0") {
+  implementation ("com.github.bumptech.glide:glide:4.11.0") {
     exclude group: "com.android.support"
   }
   implementation "com.android.support:support-fragment:26.1.0"
@@ -30,7 +30,7 @@ dependencies {
 Using a different support library version than the one Glide depends on can cause `RuntimeException`s like:
 
 ```
-java.lang.NoSuchMethodError: No static method getFont(Landroid/content/Context;ILandroid/util/TypedValue;ILandroid/widget/TextView;)Landroid/graphics/Typeface; in class Landroid/support/v4/content/res/ResourcesCompat; or its super classes (declaration of 'android.support.v4.content.res.ResourcesCompat'
+java.lang.NoSuchMethodError: No static method getFont(Landroid/content/Context;ILandroid/util/TypedValue;ILandroid/widget/TextView;)Landroid/graphics/Typeface; in class Landroid/support/v4/content/res/ResourcesCompat; or its super classes (declaration of 'android.support.v4.content.res.ResourcesCompat' 
 at android.support.v7.widget.TintTypedArray.getFont(TintTypedArray.java:119)
 ```
 
@@ -57,9 +57,9 @@ repositories {
 }
 
 dependencies {
-    compile 'com.github.bumptech.glide:glide:4.9.0'
+    compile 'com.github.bumptech.glide:glide:4.11.0'
     // Skip this if you don't want to use integration libraries or configure Glide.
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
 }
 ```
 
@@ -67,13 +67,13 @@ dependencies {
 
 ```groovy
 dependencies {
-    implementation ("com.github.bumptech.glide:glide:4.9.0@aar") {
+    implementation ("com.github.bumptech.glide:glide:4.11.0@aar") {
         transitive = true
     }
 }
 ```
 
-`@aar` is Gradle's ["Artifact only"][9] notation that excludes dependencies by default.
+`@aar` is Gradle's ["Artifact only"][9] notation that excludes dependencies by default. 
 
 Excluding Glide's dependencies by using `@aar` without `transitive = true `will result in runtime exceptions like:
 
@@ -99,7 +99,7 @@ If you use Maven you can add a dependency on Glide as well. Again, you will also
 <dependency>
   <groupId>com.github.bumptech.glide</groupId>
   <artifactId>glide</artifactId>
-  <version>4.9.0</version>
+  <version>4.11.0</version>
   <type>aar</type>
 </dependency>
 <dependency>
@@ -110,7 +110,7 @@ If you use Maven you can add a dependency on Glide as well. Again, you will also
 <dependency>
   <groupId>com.github.bumptech.glide</groupId>
   <artifactId>compiler</artifactId>
-  <version>4.9.0</version>
+  <version>4.11.0</version>
   <optional>true</optional>
 </dependency>
 ```
@@ -145,7 +145,7 @@ However if you're planning on loading images from urls or over a network connect
 ``ACCESS_NETWORK_STATE`` isn't technically required to allow Glide to load urls, but it helps Glide handle flaky network connections and airplane mode. See the Connectivity Monitoring section below for more details
 
 ##### Connectivity Monitoring
-If you're loading images from urls, Glide can automatically help you deal with flaky network connections by monitoring users' connectivity status and restarting failed requests when users are reconnected. If Glide detects that your application has the ``ACCESS_NETWORK_STATE``, Glide will automatically monitor connectivity status and no further changes are needed.
+If you're loading images from urls, Glide can automatically help you deal with flaky network connections by monitoring users' connectivity status and restarting failed requests when users are reconnected. If Glide detects that your application has the ``ACCESS_NETWORK_STATE``, Glide will automatically monitor connectivity status and no further changes are needed. 
 
 You can verify that Glide is monitoring network status by checking the ``ConnectivityMonitor`` log tag:
 
@@ -182,7 +182,7 @@ To load images from local folders like DCIM or Pictures, you'll need to add the 
 </manifest>
 ```
 
-To use [``ExternalPreferredCacheDiskCacheFactory``][7] to store Glide's cache on the public sdcard, you'll need to use the
+To use [``ExternalPreferredCacheDiskCacheFactory``][7] to store Glide's cache on the public sdcard, you'll need to use the 
 ``WRITE_EXTERNAL_STORAGE`` permission instead:
 
 ```xml
@@ -225,7 +225,7 @@ If you use DexGuard you may also want to include:
 Glide's build configuration requires features that [Jack][3] does not currently support. Jack was recently [deprecated][4] and it's unlikely that the features Glide requires will ever be added. If you'd like to compile with Java 8, see below.
 
 #### Java 8
-Starting with Android Studio 3.0 and version 3.0 of the Android Gradle plugin, you can compile your project and Glide with Java 8. For details, see the [Use Java 8 Language Features][5] on the Android Developers website.
+Starting with Android Studio 3.0 and version 3.0 of the Android Gradle plugin, you can compile your project and Glide with Java 8. For details, see the [Use Java 8 Language Features][5] on the Android Developers website. 
 
 Glide itself does not use or require you to use Java 8 to compile or use Glide in your project. Glide will eventually require Java 8 to compile, but we will do our best to allow time for developers to update their applications first, so it's likely that Java 8 won't be a requirement for months or years (as of 11/2017).
 
@@ -235,7 +235,7 @@ If you use Glide's annotations on classes implemented in Kotlin, you need to inc
 
 ```groovy
 dependencies {
-  kapt 'com.github.bumptech.glide:compiler:4.9.0'
+  kapt 'com.github.bumptech.glide:compiler:4.11.0'
 }
 ```
 Note that you must also include the ``kotlin-kapt`` plugin in your ``build.gradle`` file:

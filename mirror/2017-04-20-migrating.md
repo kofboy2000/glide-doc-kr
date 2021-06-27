@@ -171,7 +171,7 @@ Drawables are requested by default:
 ```java
 Glide.with(fragment).load(url)
 ```
-
+  
 To request a Bitmap:
 
 ```java
@@ -207,7 +207,7 @@ boolean isAnimated = drawable instanceof Animatable
 The signature of ``onResourceReady`` has changed. For example, for ``Drawables``:
 
 ```java
-onResourceReady(GlideDrawable drawable, GlideAnimation<? super GlideDrawable> anim)
+onResourceReady(GlideDrawable drawable, GlideAnimation<? super GlideDrawable> anim) 
 ```
 
 is now:
@@ -284,11 +284,11 @@ public class GiphyGlideModule extends AppGlideModule {
 
 Note that the ``@GlideModule`` annotation is required.
 
-If your application has multiple ``GlideModule``s, convert one of them to a ``AppGlideModule`` and the others to [``LibraryGlideModule``s][3]. ``LibraryGlideModule``s will not be discovered unless a ``AppGlideModule`` is present, so you cannot use only ``LibraryGlideModule``s.
+If your application has multiple ``GlideModule``s, convert one of them to a ``AppGlideModule`` and the others to [``LibraryGlideModule``s][3]. ``LibraryGlideModule``s will not be discovered unless a ``AppGlideModule`` is present, so you cannot use only ``LibraryGlideModule``s. 
 
 ### Libraries
 
-Libraries that have one or more ``GlideModule``s should use [``LibraryGlideModule``][3] instead of [``AppGlideModule``][2]. Libraries should not use [``AppGlideModule``s][2] because there can only be one per Application, so including it in a library would not only prevent users of the library from setting their own options, but it would also cause conflicts if multiple libraries included a ``AppGlideModule``.
+Libraries that have one or more ``GlideModule``s should use [``LibraryGlideModule``][3] instead of [``AppGlideModule``][2]. Libraries should not use [``AppGlideModule``s][2] because there can only be one per Application, so including it in a library would not only prevent users of the library from setting their own options, but it would also cause conflicts if multiple libraries included a ``AppGlideModule``. 
 
 For example, the Volley ``GlideModule`` in v3:
 

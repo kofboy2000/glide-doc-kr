@@ -44,7 +44,7 @@ Glide.with(fragment)
 Options can be shared across requests using the `RequestOptions` class:
 
 ```java
-RequestOptions sharedOptions =
+RequestOptions sharedOptions = 
     new RequestOptions()
       .placeholder(placeholder)
       .fitCenter();
@@ -107,10 +107,16 @@ In addition to loading ``Bitmap``s and ``Drawable``s into ``View``s, you can als
 ```java
 Glide.with(context
   .load(url)
-  .into(new SimpleTarget<Drawable>() {
+  .into(new CustomTarget<Drawable>() {
     @Override
     public void onResourceReady(Drawable resource, Transition<Drawable> transition) {
       // Do something with the Drawable here.
+    }
+
+    @Override
+    public void onLoadCleared(@Nullable Drawable placeholder) {
+      // Remove the Drawable provided in onResourceReady from any Views and ensure 
+      // no references to it remain.
     }
   });
 ```
